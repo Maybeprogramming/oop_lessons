@@ -66,7 +66,6 @@
         {
             return _products.Count();
         }
-
     }
 
     class Product
