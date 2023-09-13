@@ -10,7 +10,6 @@
                 new Train()
             };
 
-
             foreach (var vehicle in vehicles)
             {
                 vehicle.Move();
