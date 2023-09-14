@@ -19,11 +19,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "lesson_07_virtual_methods",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "lesson_08_update_cycle_pattern", "lesson_08_update_cycle_pattern\lesson_08_update_cycle_pattern.csproj", "{6A4A6900-CCB6-4CC8-A128-E09DB75791AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lesson_09_interfaces", "lesson_09_interfaces\lesson_09_interfaces.csproj", "{00939E09-370A-4312-AB89-148B6599CF12}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "lesson_09_interfaces", "lesson_09_interfaces\lesson_09_interfaces.csproj", "{00939E09-370A-4312-AB89-148B6599CF12}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lesson_10_abstract_class", "lesson_10_abstract_class\lesson_10_abstract_class.csproj", "{5C321EEC-3896-464C-B4E2-5E10C821B103}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "lesson_10_abstract_class", "lesson_10_abstract_class\lesson_10_abstract_class.csproj", "{5C321EEC-3896-464C-B4E2-5E10C821B103}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lesson_11_static_field", "lesson_11_static_field\lesson_11_static_field.csproj", "{36A8EF81-ABF2-4EDA-BD3D-B968B5E33CA3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "lesson_11_static_field", "lesson_11_static_field\lesson_11_static_field.csproj", "{36A8EF81-ABF2-4EDA-BD3D-B968B5E33CA3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lesson_12_class_and_struct", "lesson_12_class_and_struct\lesson_12_class_and_struct.csproj", "{2E0F010B-6DC1-4013-BA21-08BABA0FD1A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,6 +77,10 @@ Global
 		{36A8EF81-ABF2-4EDA-BD3D-B968B5E33CA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36A8EF81-ABF2-4EDA-BD3D-B968B5E33CA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{36A8EF81-ABF2-4EDA-BD3D-B968B5E33CA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E0F010B-6DC1-4013-BA21-08BABA0FD1A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E0F010B-6DC1-4013-BA21-08BABA0FD1A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E0F010B-6DC1-4013-BA21-08BABA0FD1A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E0F010B-6DC1-4013-BA21-08BABA0FD1A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
