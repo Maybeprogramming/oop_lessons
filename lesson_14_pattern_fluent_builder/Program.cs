@@ -19,7 +19,7 @@ namespace lesson_14_pattern_fluent_builder
 
             director.Build();
 
-            var report = builder.GetReport();
+            EmployeeReport report = builder.GetReport();
 
             Console.WriteLine(report);
 
