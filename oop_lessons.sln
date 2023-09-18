@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lesson_13_pattern_builder",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lesson_14_pattern_fluent_builder", "lesson_14_pattern_fluent_builder\lesson_14_pattern_fluent_builder.csproj", "{D5D24A20-8AB5-47CD-8A78-14E8598DFF51}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lesson_15_events_practice_01", "lesson_15_events_practice_01\lesson_15_events_practice_01.csproj", "{241CC5DB-36F1-4D72-B476-826C27B1D556}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -93,6 +95,10 @@ Global
 		{D5D24A20-8AB5-47CD-8A78-14E8598DFF51}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5D24A20-8AB5-47CD-8A78-14E8598DFF51}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5D24A20-8AB5-47CD-8A78-14E8598DFF51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{241CC5DB-36F1-4D72-B476-826C27B1D556}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{241CC5DB-36F1-4D72-B476-826C27B1D556}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{241CC5DB-36F1-4D72-B476-826C27B1D556}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{241CC5DB-36F1-4D72-B476-826C27B1D556}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
