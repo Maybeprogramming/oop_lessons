@@ -72,6 +72,7 @@
             EventAttack?.Invoke(this, fighter);
             fighter.TakeDamage(Damage);
         }
+
     }
 
     class UserInterface
