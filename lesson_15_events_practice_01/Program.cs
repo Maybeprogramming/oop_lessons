@@ -7,7 +7,7 @@
 
     class Program
     {
-        public static event HandlerPrintBar EventPrintBar;
+        private static event HandlerPrintBar EventPrintBar;
 
         static void Main()
         {
@@ -17,17 +17,20 @@
             int Counter = 0;
             bool isAlive = true;
 
-            Console.WriteLine("Старт битвы");
+            Console.WriteLine("Начать битву?");
+            EventPrintBar?.Invoke(fighter1, fighter2);
             Console.ReadKey();
 
             while (isAlive == true)
             {
+                Console.Clear();
                 EventPrintBar?.Invoke(fighter1, fighter2);
 
                 Console.Write($"{++Counter} раунд:\n");
                 fighter1.Attack(fighter2);
                 fighter2.Attack(fighter1);
 
+                EventPrintBar?.Invoke(fighter1, fighter2);
 
                 if (fighter1.Health < 0 || fighter2.Health < 0)
                 {
@@ -38,7 +41,6 @@
                 Console.ReadLine();
             }
 
-            EventPrintBar?.Invoke(fighter1, fighter2);
             Console.WriteLine("Бой закончен!!!");
             Console.ReadKey();
         }
