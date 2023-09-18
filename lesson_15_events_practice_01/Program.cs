@@ -17,9 +17,13 @@
             int Counter = 0;
             bool isAlive = true;
 
+            Console.WriteLine("Старт битвы");
+            Console.ReadKey();
+
             while (isAlive == true)
             {
                 EventPrintBar?.Invoke(fighter1, fighter2);
+
                 Console.Write($"{++Counter} раунд:\n");
                 fighter1.Attack(fighter2);
                 fighter2.Attack(fighter1);
@@ -125,10 +129,8 @@
 
                 if (i == 1)
                 {
-                    Console.CursorTop = i;
-                    Console.Write(new string(' ', 20));
-                    Console.CursorLeft = 80;
-                    Console.Write($"Боец: {fighter1.Name}. HP: {fighter1.Health}");
+                    ClearString(i);
+                    PrintFighterStats(fighter1);
                 }
 
                 if (i == 2)
@@ -139,17 +141,25 @@
 
                 if (i == 3)
                 {
-                    Console.CursorTop = i;
-                    Console.Write(new string(' ', 20));
-                    Console.CursorLeft = 80;
-                    Console.Write($"Боец: {fighter2.Name}. HP: {fighter2.Health}");
+                    ClearString(i);
+                    PrintFighterStats(fighter2);
                 }
             }
 
             Console.CursorLeft = currentCursorPositionLeft;
             Console.CursorTop = currentCursorPositionTop;
         }
+
+        private static void PrintFighterStats(Fighter fighter)
+        {
+            Console.Write($"Боец: {fighter.Name}. HP: {fighter.Health}");
+        }
+
+        private static void ClearString(int i)
+        {
+            Console.CursorTop = i;
+            Console.Write(new string(' ', 20));
+            Console.CursorLeft = 80;
+        }
     }
-
-
 }
