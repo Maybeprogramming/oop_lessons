@@ -85,6 +85,8 @@
         public event HandlerNotDamage? EventNotDamage;
         public event HandlerAttack? EventAttack;
 
+        public event Action action;
+
         public event EventHandler? AttackDamage;
         public event EventHandler? FighterDead;
         private FighterEventArgs? eventArgs;
@@ -239,7 +241,7 @@
 //1Боец Олег получил 10 урона, теперь у него 148 здоровья               | Статистика:       |
 //2                                                                     | Боец: < Олег >    |
 //3                                                                     | HP:   < 200 >     |
-//4                                                                     | DMG:  < 50 >      |
+//4                                                                     | DMG:  < 50 >       |
 //5                                                                     |-------------------|
 //6                                                                     | Боец: < Олег >    |
 //7                                                                     | HP:   < 200 >     |
