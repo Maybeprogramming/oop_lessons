@@ -37,7 +37,7 @@
                     isAlive = false;
                 }
 
-                Console.WriteLine("Нажмите любую клавишу для продолжения...");
+                Console.WriteLine("Нажмите любую клавишу для продолжения боя...");
                 Console.ReadLine();
             }
 
@@ -82,7 +82,6 @@
                 return false;
             }
         }
-
         public void Attack(Fighter fighter)
         {
             EventAttack?.Invoke(this, fighter);
@@ -90,7 +89,6 @@
         }
 
     }
-
     class UserInterface
     {
         private static int currentCursorPositionLeft;
@@ -128,20 +126,17 @@
                     Console.CursorTop = i;
                     Console.Write($"Статистика:");
                 }
-
-                if (i == 1)
+                else if (i == 1)
                 {
                     ClearString(i);
                     PrintFighterStats(fighter1);
                 }
-
-                if (i == 2)
+                else if (i == 2)
                 {
                     Console.CursorTop = i;
                     Console.Write(new string('-', 20));
                 }
-
-                if (i == 3)
+                else if (i == 3)
                 {
                     ClearString(i);
                     PrintFighterStats(fighter2);
@@ -157,9 +152,9 @@
             Console.Write($"Боец: {fighter.Name}. HP: {fighter.Health}");
         }
 
-        private static void ClearString(int i)
+        private static void ClearString(int topCursorPosition)
         {
-            Console.CursorTop = i;
+            Console.CursorTop = topCursorPosition;
             Console.Write(new string(' ', 20));
             Console.CursorLeft = 80;
         }
