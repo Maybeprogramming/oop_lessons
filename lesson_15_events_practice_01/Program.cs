@@ -1,4 +1,6 @@
-﻿namespace lesson_15_events_practice_01
+﻿using System.Text;
+
+namespace lesson_15_events_practice_01
 {
     public delegate void HandlerDamage(int damage, int health, string name);
     public delegate void HandlerNotDamage(string name);
@@ -12,7 +14,7 @@
         static void Main()
         {
             Console.WindowHeight = 40;
-            Console.WindowWidth = 130;
+            Console.WindowWidth = 110;
             Random random = new Random();
 
             UserInterface userInterface = new();
@@ -52,7 +54,10 @@
             }
 
             Console.WriteLine("Бой закончен!!!");
-            Console.ReadKey();
+
+            userInterface.PrintBaseScreen();
+
+            Console.ReadLine();
         }
 
         private static void InitializationEvents(UserInterface userInterface, Fighter fighter)
@@ -233,15 +238,34 @@
             Console.CursorLeft = currentCursorPositionLeft;
             Console.CursorTop = currentCursorPositionTop;
         }
+
+        public void PrintBaseScreen()
+        {
+            StringBuilder sb = new();
+            sb.Append("    A    |     B   |     C   |     D   |     E   |     F   |     G   |     J   |     L   |\n");
+            sb.Append("012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789\n");
+            sb.Append("                                                                     | Статистика:       |\n");
+            sb.Append("                                                                     | Боец: < Олег >    |\n");
+            sb.Append("                                                                     | HP:   < 200 >     |\n");
+            sb.Append("                                                                     | DMG:  < 50 >      |\n");
+            sb.Append("                                                                     |-------------------|\n");
+            sb.Append("                                                                     | Боец: < Олег >    |\n");
+            sb.Append("                                                                     | HP:   < 200 >     |\n");
+            sb.Append("                                                                     | DMG:  < 50 >      |\n");
+            sb.Append("                                                                     |-------------------|\n");
+
+            Console.Write(sb);
+        }
     }
 }
 
-//     A    |     B   |     C   |     D   |     E   |     F   |     G   |     J   |     L   |      
+
+//     A    |     B   |     C   |     D   |     E   |     F   |     G   |     J   |     L   |
 // 012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789
 //1Боец Олег получил 10 урона, теперь у него 148 здоровья               | Статистика:       |
 //2                                                                     | Боец: < Олег >    |
 //3                                                                     | HP:   < 200 >     |
-//4                                                                     | DMG:  < 50 >       |
+//4                                                                     | DMG:  < 50 >      |
 //5                                                                     |-------------------|
 //6                                                                     | Боец: < Олег >    |
 //7                                                                     | HP:   < 200 >     |
