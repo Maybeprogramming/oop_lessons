@@ -7,13 +7,23 @@
 
     class Program
     {
-        private static event HandlerPrintBar EventPrintBar;
+        private static event HandlerPrintBar? EventPrintBar;
 
         static void Main()
         {
-            Fighter fighter1 = new Fighter(140, 20, "Иван");
-            Fighter fighter2 = new Fighter(140, 30, "Олег");
-            EventPrintBar += UserInterface.OnPrintBar;
+            Console.WindowHeight = 40;
+            Console.WindowWidth = 130;
+            Random random = new Random();
+
+            UserInterface userInterface = new();
+
+            Fighter fighter1 = new(random.Next(100,200), random.Next(10,40), "Иван");
+            InitializationEvents(userInterface, fighter1);
+
+            Fighter fighter2 = new(random.Next(100, 200), random.Next(10, 40), "Олег");
+            InitializationEvents(userInterface, fighter2);
+
+            EventPrintBar += userInterface.OnPrintBar;
             int Counter = 0;
             bool isAlive = true;
 
@@ -32,7 +42,7 @@
 
                 EventPrintBar?.Invoke(fighter1, fighter2);
 
-                if (fighter1.Health < 0 || fighter2.Health < 0)
+                if (fighter1.IsDead == true || fighter2.IsDead == true)
                 {
                     isAlive = false;
                 }
@@ -44,35 +54,68 @@
             Console.WriteLine("Бой закончен!!!");
             Console.ReadKey();
         }
+
+        private static void InitializationEvents(UserInterface userInterface, Fighter fighter)
+        {
+            fighter.AttackDamage += userInterface.OnAttackDamage;
+            fighter.EventTakeDamage += userInterface.OnTakeDamage;
+            fighter.EventNotDamage += userInterface.OnNotTakeDamage;
+            fighter.EventAttack += userInterface.OnAttack;
+            fighter.FighterDead += userInterface.OnDeadFighter;
+        }
+    }
+
+    class FighterEventArgs : EventArgs
+    {
+        public FighterEventArgs(string name, int health, int damage)
+        {
+            Name = name;
+            Health = health;
+            Damage = damage;
+        }
+
+        public string Name { get; private set; }
+        public int Health { get; private set; }
+        public int Damage { get; private set; }
     }
 
     public class Fighter
     {
-        public event HandlerDamage EventTakeDamage;
-        public event HandlerNotDamage EventNotDamage;
-        public event HandlerAttack EventAttack;
+        public event HandlerDamage? EventTakeDamage;
+        public event HandlerNotDamage? EventNotDamage;
+        public event HandlerAttack? EventAttack;
+
+        public event EventHandler? AttackDamage;
+        public event EventHandler? FighterDead;
+        private FighterEventArgs? eventArgs;
 
         public Fighter(int health, int damage, string name)
         {
             Health = health;
             Damage = damage;
             Name = name;
-            EventTakeDamage += UserInterface.OnTakeDamage;
-            EventNotDamage += UserInterface.OnNotTakeDamage;
-            EventAttack += UserInterface.OnAttack;
         }
 
         public int Health { get; private set; }
         public int Damage { get; private set; }
         public string Name { get; private set; }
+        public bool IsDead
+        {
+            get => Health <= 0;
+        }
 
         public bool TakeDamage(int damage)
         {
-            if (Health > 0)
+            if (IsDead == false)
             {
                 Health -= damage;
 
                 EventTakeDamage?.Invoke(damage, Health, Name);
+
+                if (Health < 0)
+                {
+                    FighterDead?.Invoke(this, new EventArgs());
+                }
 
                 return true;
             }
@@ -82,8 +125,13 @@
                 return false;
             }
         }
+
         public void Attack(Fighter fighter)
         {
+            eventArgs = new FighterEventArgs(fighter.Name, fighter.Health, fighter.Damage);
+
+            AttackDamage?.Invoke(this, eventArgs);
+
             EventAttack?.Invoke(this, fighter);
             fighter.TakeDamage(Damage);
         }
@@ -91,25 +139,33 @@
     }
     class UserInterface
     {
-        private static int currentCursorPositionLeft;
-        private static int currentCursorPositionTop;
+        private int currentCursorPositionLeft;
+        private int currentCursorPositionTop;
 
-        public static void OnTakeDamage(int damage, int health, string name)
+        public void OnTakeDamage(int damage, int health, string name)
         {
             Console.WriteLine($"Боец {name} получил {damage} урона, теперь у него {health} здоровья");
         }
 
-        public static void OnNotTakeDamage(string name)
+        public void OnNotTakeDamage(string name)
         {
             Console.WriteLine($"({name}) Невозможно убить то что мертво...");
         }
 
-        internal static void OnAttack(Fighter fighterAttack, Fighter fighterTakeDamage)
+        internal void OnAttack(Fighter fighterAttack, Fighter fighterTakeDamage)
         {
             Console.WriteLine($"Боец {fighterAttack.Name} атаковал {fighterTakeDamage.Name} и нанёс ему {fighterAttack.Damage} урона");
         }
 
-        public static void OnPrintBar(Fighter fighter1, Fighter fighter2)
+        public void OnAttackDamage(object? sender, EventArgs e)
+        {
+            Fighter? fighter = (Fighter)sender;
+            FighterEventArgs? eventArgs = (FighterEventArgs)e;
+
+            Console.WriteLine($"Боец {fighter.Name} атаковал ({eventArgs.Name}) и нанёс ему {fighter.Damage} урона");
+        }
+
+        public void OnPrintBar(Fighter fighter1, Fighter fighter2)
         {
             currentCursorPositionLeft = Console.CursorLeft;
             currentCursorPositionTop = Console.CursorTop;
@@ -147,16 +203,46 @@
             Console.CursorTop = currentCursorPositionTop;
         }
 
-        private static void PrintFighterStats(Fighter fighter)
+        private void PrintFighterStats(Fighter fighter)
         {
             Console.Write($"Боец: {fighter.Name}. HP: {fighter.Health}");
         }
 
-        private static void ClearString(int topCursorPosition)
+        private void ClearString(int topCursorPosition)
         {
             Console.CursorTop = topCursorPosition;
             Console.Write(new string(' ', 20));
             Console.CursorLeft = 80;
         }
+
+        public void OnDeadFighter(object? sender, EventArgs e)
+        {
+            Fighter? fighter = (Fighter)sender;
+
+            currentCursorPositionLeft = Console.CursorLeft;
+            currentCursorPositionTop = Console.CursorTop;
+            Console.CursorLeft = 80;
+            Console.CursorTop = 6;
+
+            ClearString(6);
+            Console.CursorTop = 6;
+            Console.Write($"{fighter.Name} погиб...");
+
+            Console.CursorLeft = currentCursorPositionLeft;
+            Console.CursorTop = currentCursorPositionTop;
+        }
     }
 }
+
+//     A    |     B   |     C   |     D   |     E   |     F   |     G   |     J   |     L   |      
+// 012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789
+//1
+//2
+//3
+//4
+//5
+//6
+//7
+//8
+//9
+//0
