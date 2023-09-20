@@ -2,7 +2,7 @@
 
 namespace lesson_15_events_practice_01
 {
-    public delegate void HandlerDamage(int damage, int health, string name);
+    public delegate void FighterDamageHandler(int damage, int health, string name);
     public delegate void HandlerNotDamage(string name);
     public delegate void HandlerAttack(Fighter fighterAttack, Fighter fighterTakeDamage);
     public delegate void HandlerPrintBar(Fighter fighter1, Fighter fighter2);
@@ -20,10 +20,10 @@ namespace lesson_15_events_practice_01
             UserInterface userInterface = new();
 
             Fighter fighter1 = new(random.Next(100,200), random.Next(10,40), "Иван");
-            InitializationEvents(userInterface, fighter1);
+            SubscribsToEvents(userInterface, fighter1);
 
             Fighter fighter2 = new(random.Next(100, 200), random.Next(10, 40), "Олег");
-            InitializationEvents(userInterface, fighter2);
+            SubscribsToEvents(userInterface, fighter2);
 
             EventPrintBar += userInterface.OnPrintBar;
             int Counter = 0;
@@ -60,12 +60,13 @@ namespace lesson_15_events_practice_01
             Console.ReadLine();
         }
 
-        private static void InitializationEvents(UserInterface userInterface, Fighter fighter)
+        private static void SubscribsToEvents(UserInterface userInterface, Fighter fighter)
         {
             fighter.AttackDamage += userInterface.OnAttackDamage;
             fighter.EventTakeDamage += userInterface.OnTakeDamage;
             fighter.EventNotDamage += userInterface.OnNotTakeDamage;
             fighter.EventAttack += userInterface.OnAttack;
+            fighter.ActionAttack += userInterface.OnAttack;
             fighter.FighterDead += userInterface.OnDeadFighter;
         }
     }
@@ -86,9 +87,11 @@ namespace lesson_15_events_practice_01
 
     public class Fighter
     {
-        public event HandlerDamage? EventTakeDamage;
+        public event FighterDamageHandler? EventTakeDamage;
         public event HandlerNotDamage? EventNotDamage;
         public event HandlerAttack? EventAttack;
+
+        public event Action<Fighter, Fighter> ActionAttack;
 
         public event Action action;
 
@@ -140,6 +143,9 @@ namespace lesson_15_events_practice_01
             AttackDamage?.Invoke(this, eventArgs);
 
             EventAttack?.Invoke(this, fighter);
+
+            ActionAttack?.Invoke(this, fighter);
+
             fighter.TakeDamage(Damage);
         }
 
@@ -255,6 +261,12 @@ namespace lesson_15_events_practice_01
             sb.Append("                                                                     |-------------------|\n");
 
             Console.Write(sb);
+
+            var equalNumbers = bool (int i, int j) => { return i > j; };
+
+            bool isEqual = equalNumbers(10, 2);
+
+            Console.WriteLine(isEqual);
         }
     }
 }
