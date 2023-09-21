@@ -84,5 +84,7 @@
             Console.WriteLine($"Отправляем SMS сообщение: \r\n{message}\r\n");
         }
     }
-
 }
+
+//CLR via C# Рихтер (Глава 11)
+//С канала CODE BLOG
