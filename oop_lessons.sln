@@ -33,7 +33,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "lesson_14_pattern_fluent_bu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "lesson_15_events_practice_01", "lesson_15_events_practice_01\lesson_15_events_practice_01.csproj", "{241CC5DB-36F1-4D72-B476-826C27B1D556}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lesson_16_events_practice_02", "lesson_16_events_practice_02\lesson_16_events_practice_02.csproj", "{FBABC1FB-234E-4A3F-9BEF-AFAF9F107D3D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "lesson_16_events_practice_02", "lesson_16_events_practice_02\lesson_16_events_practice_02.csproj", "{FBABC1FB-234E-4A3F-9BEF-AFAF9F107D3D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lesson_17_events_practice_03", "lesson_17_events_practice_03\lesson_17_events_practice_03.csproj", "{3A155A16-7179-4A60-BD8B-59D9CC482D99}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -105,6 +107,10 @@ Global
 		{FBABC1FB-234E-4A3F-9BEF-AFAF9F107D3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FBABC1FB-234E-4A3F-9BEF-AFAF9F107D3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FBABC1FB-234E-4A3F-9BEF-AFAF9F107D3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A155A16-7179-4A60-BD8B-59D9CC482D99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A155A16-7179-4A60-BD8B-59D9CC482D99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A155A16-7179-4A60-BD8B-59D9CC482D99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A155A16-7179-4A60-BD8B-59D9CC482D99}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
