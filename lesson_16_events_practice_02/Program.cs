@@ -2,7 +2,7 @@
 {
     class Program
     {
-        public static Action<string>? selectedHero;
+        public static event Action<string>? selectedHero;
 
         static void Main()
         {
