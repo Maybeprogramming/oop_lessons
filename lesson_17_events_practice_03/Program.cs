@@ -7,6 +7,10 @@
             var mailManager = new MailManager();
             mailManager.NewMail += MailManagerNewMail;
 
+            // Второй вариант реализации
+            var sms = new SMS(mailManager);
+            //конец второй реализации
+
             Console.WriteLine("Введите ваше имя: ");
             var sender = Console.ReadLine();
 
@@ -79,6 +83,23 @@
 
     class SMS
     {
+        public SMS()
+        {
+
+        }
+
+        //Второй варинат реализации
+        public SMS (MailManager mailManager)
+        {
+            mailManager.NewMail += OnNewMail;
+        }
+        //Конец второй реализации
+
+        private void OnNewMail(object? sender, NewMailEventsArgs e)
+        {
+            Console.WriteLine($"{sender}");
+        }
+
         public void Send(string message)
         {
             Console.WriteLine($"Отправляем SMS сообщение: \r\n{message}\r\n");
