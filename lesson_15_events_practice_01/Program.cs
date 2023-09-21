@@ -2,10 +2,10 @@
 
 namespace lesson_15_events_practice_01
 {
-    public delegate void FighterDamageHandler(int damage, int health, string name);
-    public delegate void HandlerNotDamage(string name);
-    public delegate void HandlerAttack(Fighter fighterAttack, Fighter fighterTakeDamage);
-    public delegate void HandlerPrintBar(Fighter fighter1, Fighter fighter2);
+    delegate void FighterDamageHandler(int damage, int health, string name);
+    delegate void HandlerNotDamage(string name);
+    delegate void HandlerAttack(Fighter fighterAttack, Fighter fighterTakeDamage);
+    delegate void HandlerPrintBar(Fighter fighter1, Fighter fighter2);
 
     class Program
     {
@@ -19,7 +19,7 @@ namespace lesson_15_events_practice_01
 
             UserInterface userInterface = new();
 
-            Fighter fighter1 = new(random.Next(100,200), random.Next(10,40), "Иван");
+            Fighter fighter1 = new(random.Next(100, 200), random.Next(10, 40), "Иван");
             SubscribsToEvents(userInterface, fighter1);
 
             Fighter fighter2 = new(random.Next(100, 200), random.Next(10, 40), "Олег");
@@ -85,7 +85,7 @@ namespace lesson_15_events_practice_01
         public int Damage { get; private set; }
     }
 
-    public class Fighter
+    class Fighter
     {
         public event FighterDamageHandler? EventTakeDamage;
         public event HandlerNotDamage? EventNotDamage;
@@ -95,7 +95,7 @@ namespace lesson_15_events_practice_01
 
         public event Action action;
 
-        public event EventHandler? AttackDamage;
+        public event EventHandler<FighterEventArgs>? AttackDamage;
         public event EventHandler? FighterDead;
         private FighterEventArgs? eventArgs;
 
@@ -136,17 +136,15 @@ namespace lesson_15_events_practice_01
             }
         }
 
-        public void Attack(Fighter fighter)
+        public void Attack(Fighter target)
         {
-            eventArgs = new FighterEventArgs(fighter.Name, fighter.Health, fighter.Damage);
-
+            eventArgs = new FighterEventArgs(target.Name, target.Health, target.Damage);
             AttackDamage?.Invoke(this, eventArgs);
 
-            EventAttack?.Invoke(this, fighter);
+            //EventAttack?.Invoke(this, target);
+            //ActionAttack?.Invoke(this, target);
 
-            ActionAttack?.Invoke(this, fighter);
-
-            fighter.TakeDamage(Damage);
+            target.TakeDamage(Damage);
         }
 
     }
@@ -170,12 +168,13 @@ namespace lesson_15_events_practice_01
             Console.WriteLine($"Боец {fighterAttack.Name} атаковал {fighterTakeDamage.Name} и нанёс ему {fighterAttack.Damage} урона");
         }
 
-        public void OnAttackDamage(object? sender, EventArgs e)
+        public void OnAttackDamage(object? sender, FighterEventArgs e)
         {
-            Fighter? fighter = (Fighter)sender;
-            FighterEventArgs? eventArgs = (FighterEventArgs)e;
+            if (sender is Fighter)
+            {
+                Console.WriteLine($"Боец {((Fighter)sender).Name} атаковал ({e.Name}) и нанёс ему {e.Damage} урона");
+            }
 
-            Console.WriteLine($"Боец {fighter.Name} атаковал ({eventArgs.Name}) и нанёс ему {fighter.Damage} урона");
         }
 
         public void OnPrintBar(Fighter fighter1, Fighter fighter2)
