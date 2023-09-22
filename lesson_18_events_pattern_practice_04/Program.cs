@@ -37,7 +37,8 @@
         #region использование системы событий
         private static void TypeWithLotsEvents_Foo(object? sender, FooEventsArgs e)
         {
-            Console.WriteLine("Произошло событие Foo");
+            Console.WriteLine(new string('-', 50));
+            Console.WriteLine("\nПроизошло событие Foo");
         }
         #endregion
 
