@@ -183,4 +183,32 @@
             Monitor.Exit(events);
         }
     }
+
+    class FooEventsArgs: EventArgs { }
+
+    class TypeWithLotsEvents
+    {
+        protected EventSet EventSet { get; } = new EventSet();
+
+        #region FooEvent
+        protected static readonly EventKey fooEventKey = new EventKey();
+
+        public event EventHandler<FooEventsArgs> Foo
+        {
+            add { EventSet.Add(fooEventKey, value); }
+            remove { EventSet.Remove(fooEventKey, value); }
+        }
+
+        protected virtual void OnFoo(FooEventsArgs e)
+        {
+            EventSet.Raise(fooEventKey, this, e);
+        }
+
+        public void SimulateFoo()
+        {
+            OnFoo(new FooEventsArgs());
+        }
+        #endregion
+
+    }
 }
