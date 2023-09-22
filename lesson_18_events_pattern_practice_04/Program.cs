@@ -23,8 +23,23 @@
 
             mailManager.SimulatedNewMail(sender, target, message);
 
+            #region использование системы событий
+
+            var typeWithLotsEvents = new TypeWithLotsEvents();
+            typeWithLotsEvents.Foo += TypeWithLotsEvents_Foo;
+            typeWithLotsEvents.SimulateFoo();
+
+            #endregion
+
             Console.ReadLine();
         }
+
+        #region использование системы событий
+        private static void TypeWithLotsEvents_Foo(object? sender, FooEventsArgs e)
+        {
+            Console.WriteLine("Произошло событие Foo");
+        }
+        #endregion
 
         private static void MailManagerNewMail(object? sender, NewMailEventsArgs e)
         {
