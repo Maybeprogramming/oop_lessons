@@ -75,6 +75,24 @@
 
     class Printer
     {
+        public Printer() { }
+        public Printer (MailManager mailManager)
+        {
+            mailManager.NewMail += OnNewMailEvent;
+        }
+
+        private void OnNewMailEvent(object? sender, NewMailEventsArgs e)
+        {
+            Console.WriteLine("Получено новое сообщение. Выводим на печать:");
+            Console.WriteLine($"Письмо от {e.From} для {e.To}");
+            Console.WriteLine(e.Subject);
+        }
+
+        public void Unregister(MailManager mailManager)
+        {
+            mailManager.NewMail -= OnNewMailEvent;
+        }
+
         public void Print (string message)
         {
             Console.WriteLine($"Печатаем сообщение на бумаге: \r\n{message}\r\n");
