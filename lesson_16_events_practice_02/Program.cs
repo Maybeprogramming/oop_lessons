@@ -5,7 +5,7 @@
         public static event Action<string>? selectedHero;
 
         static void Main()
-        {
+        { 
             Console.CursorVisible = false;
 
             int numberSelected = 0;
