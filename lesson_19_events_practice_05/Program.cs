@@ -4,6 +4,8 @@
     {
         static void Main()
         {
+            Console.CursorVisible = false;
+
             List<string> list = new()
             {
                 "Валькирия",
@@ -28,14 +30,20 @@
                 "Ракета"
             };
 
+            bool isSelectedFighters = false;
+
+            List<string> selectedFighters = new();
+
             int numberSelected = 0;
 
-            ControlList controlList = new ControlList(list, new Point(0, 1));
-            Console.WriteLine("Меню:");
-            controlList.Drow();
+            ControlList controlList = new ControlList(list);
 
-            while (true)
+            while (isSelectedFighters == false)
             {
+                Display.Print($"Список бойцов для выбора:", new Point(0, 0));
+                controlList.SetPosition(new Point(0, 1));
+                controlList.Drow();
+
                 ConsoleKeyInfo consoleKey;
                 consoleKey = Console.ReadKey();
 
@@ -43,15 +51,29 @@
                 {
                     case ConsoleKey.UpArrow: numberSelected = ChangeNegative(list.Count, numberSelected); break;
                     case ConsoleKey.DownArrow: numberSelected = ChangePositive(list.Count, numberSelected); break;
-                    case ConsoleKey.Enter: SelectHero(numberSelected, list); break;
+                    case ConsoleKey.Enter: SelectHero(numberSelected, list, selectedFighters); break;
                 }
 
                 controlList.SelectElement(numberSelected);
 
+                if (selectedFighters.Count == 2)
+                {
+                    Console.Clear();
+                    Display.Print($"Выбранные бойцы:\n", new Point());
+
+
+                    foreach (var fighter in selectedFighters)
+                    {
+                        Display.Print(fighter + "\n", new Point());
+                    }
+
+                    isSelectedFighters = true;
+                }
+
                 Task.Delay(20).Wait();
             }
 
-
+            Console.WriteLine("\nПрограмма завершена!!!");
             Console.ReadLine();
         }
 
@@ -79,22 +101,28 @@
             }
         }
 
-        private static void SelectHero(int numberSelected, List<string> list)
+        private static void SelectHero(int numberSelected, List<string> list, List<string> selectedFighters)
         {
-            Display.Print($"\nВы выбрали: {list[numberSelected]}!!!", new Point());
+            if (selectedFighters.Count < 2)
+            {
+                selectedFighters.Add(list[numberSelected]);
+                ClearOneString();
+                Display.Print($"\nВы выбрали: {list[numberSelected]}!!!", new Point());
+            }
+        }
+
+        private static void ClearOneString()
+        {
+            int left = Console.CursorLeft;
+            int top = Console.CursorTop;
+            Console.WriteLine("\n" + new string(' ', 40));
+            Console.CursorLeft = left;
+            Console.CursorTop = top;
         }
     }
 
     class UserInterface
     {
-        public UserInterface(Point point, int width = 10, int height = 1, string name = "default")
-        {
-            Position = point;
-            Width = width;
-            Height = height;
-            Text = name;
-        }
-
         public string Text { get; private set; }
         public ConsoleColor ColorText { get; set; } = ConsoleColor.White;
         public Point Position { get; private set; }
@@ -105,6 +133,11 @@
         {
             Display.Print(Text, Position, ColorText);
         }
+
+        public virtual void SetPosition(Point point)
+        {
+            Position = point;
+        }
     }
 
     class ControlList : UserInterface
@@ -112,7 +145,7 @@
         private List<string> _list;
         private int _selectedElement = 0;
 
-        public ControlList(List<string> list, Point point, int width = 10, int height = 1, string name = "ControlList") : base(point, width, height, name)
+        public ControlList(List<string> list)
         {
             _list = list;
             BackColor = ConsoleColor.Yellow;
