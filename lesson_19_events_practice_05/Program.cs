@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.Metrics;
 using System.Security.Principal;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace lesson_19_events_practice_05
 {
@@ -31,13 +32,59 @@ namespace lesson_19_events_practice_05
                 "Ракета"
             };
 
-            Display.Print("Первый\n", new Point());
-            ControlList controlList = new ControlList(list, new Point(0,1));
-            controlList.SelectElement(19);
+            int numberSelected = 0;
 
-            Display.Print("Второй\n", new Point());
+            Console.WriteLine("Меню:");
+            ControlList controlList = new ControlList(list, new Point(0, 1));
+            controlList.Drow();
+
+            while (true)
+            {   
+                ConsoleKeyInfo consoleKey;
+                consoleKey = Console.ReadKey();
+
+                switch (consoleKey.Key)
+                {
+                    case ConsoleKey.UpArrow: numberSelected = ChangeNegative(list.Count, numberSelected); break;
+                    case ConsoleKey.DownArrow: numberSelected = ChangePositive(list.Count, numberSelected); break;
+                    case ConsoleKey.Enter: SelectHero(numberSelected, list); break;
+                }
+                
+                controlList.SelectElement(numberSelected);
+
+                Task.Delay(20).Wait();
+            }
 
             Console.ReadLine();
+        }
+
+        private static int ChangePositive(int listCount, int counter)
+        {
+            if (counter < listCount - 1)
+            {
+                return ++counter;
+            }
+            else
+            {
+                return counter = 0;
+            }
+        }
+
+        private static int ChangeNegative(int listCount, int counter)
+        {
+            if (counter <= 0)
+            {
+                return counter = listCount - 1;
+            }
+            else
+            {
+                return --counter;
+            }
+        }
+
+        private static void SelectHero(int numberSelected, List<string> list)
+        {
+            Display.Print($"\nВы выбрали: {list[numberSelected]}!!!", new Point());
         }
     }
 
