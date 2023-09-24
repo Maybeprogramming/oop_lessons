@@ -41,7 +41,7 @@
             bool isSelectedFighters = false;
             int numberSelected = 0;
 
-            ControlList controlList = new ControlList(fighterList);
+            FightersListBar controlList = new FightersListBar(fighterList);
 
             while (isSelectedFighters == false)
             {
@@ -167,12 +167,12 @@
         }
     }
 
-    class ControlList : UserInterface
+    class FightersListBar : UserInterface
     {
         private List<string> _list;
         private int _selectedElement = 0;
 
-        public ControlList(List<Fighter> list)
+        public FightersListBar(List<Fighter> list)
         {
             _list = list.Select(e => e.Name).ToList();
             BackColor = ConsoleColor.Yellow;
