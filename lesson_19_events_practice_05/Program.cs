@@ -41,9 +41,6 @@
             bool isSelectedFighters = false;
             int numberSelected = 0;
 
-            var fighterListname = fighterList.Select(e => e.Name);
-
-
             ControlList controlList = new ControlList(nameList);
 
             while (isSelectedFighters == false)
@@ -57,9 +54,17 @@
 
                 switch (consoleKey.Key)
                 {
-                    case ConsoleKey.UpArrow: numberSelected = ChangeNegative(fighterList.Count, numberSelected); break;
-                    case ConsoleKey.DownArrow: numberSelected = ChangePositive(fighterList.Count, numberSelected); break;
-                    case ConsoleKey.Enter: SelectHero(numberSelected, fighterList, fightersSelected); break;
+                    case ConsoleKey.UpArrow: 
+                        numberSelected = ChangeNegative(fighterList.Count, numberSelected); 
+                        break;
+
+                    case ConsoleKey.DownArrow: 
+                        numberSelected = ChangePositive(fighterList.Count, numberSelected); 
+                        break;
+
+                    case ConsoleKey.Enter: 
+                        SelectHero(numberSelected, fighterList, fightersSelected); 
+                        break;
                 }
 
                 controlList.SelectElement(numberSelected);
@@ -67,11 +72,11 @@
                 if (fightersSelected.Count == 2)
                 {
                     Console.Clear();
-                    Display.Print($"Выбранные бойцы:\n", new Point());
+                    Display.Print($"Выбранные бойцы:\n");
 
                     foreach (var fighter in fightersSelected)
                     {
-                        Display.Print(fighter.ShowInfo() + "\n", new Point());
+                        Display.Print(fighter.ShowInfo() + "\n");
                     }
 
                     isSelectedFighters = true;
@@ -114,7 +119,7 @@
             {
                 selectedFighters.Add(listHero[numberSelected]);
                 ClearOneString();
-                Display.Print($"\nВы выбрали: {listHero[numberSelected].ShowInfo()}!!!", new Point());
+                Display.Print($"\nВы выбрали: {listHero[numberSelected].ShowInfo()}!!!");
             }
         }
 
