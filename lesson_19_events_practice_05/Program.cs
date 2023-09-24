@@ -1,4 +1,5 @@
-﻿using System.Security.Principal;
+﻿using System.Diagnostics.Metrics;
+using System.Security.Principal;
 
 namespace lesson_19_events_practice_05
 {
@@ -6,9 +7,32 @@ namespace lesson_19_events_practice_05
     {
         static void Main()
         {
-            UserInterface str = new UserInterface(new Point(10,10), 10, 1, "Валькирия");
-            str.ColorText = ConsoleColor.Green;
-            str.Drow();
+            List<string> list = new()
+            {
+                "Валькирия",
+                "Алькатрон",
+                "Железный человек",
+                "Тор",
+                "Халк",
+                "Черная вдова",
+                "Стрела",
+                "Человек муравей",
+                "Алая ведьма",
+                "Черная пантера",
+                "Доктор Стрэнж",
+                "Грут",
+                "Вижен",
+                "Звездный лорд",
+                "Зимний солдат",
+                "Локи",
+                "Гамора",
+                "Дедпул",
+                "Дракс",
+                "Ракета"
+            };
+
+            ControlList controlList = new ControlList(list, new Point(0,0));
+            controlList.SelectElement(19);
 
             Console.ReadLine();
         }
@@ -39,20 +63,44 @@ namespace lesson_19_events_practice_05
     class ControlList : UserInterface
     {
         private List<string> _list;
+        private int _selectedElement = 0;
 
         public ControlList(List<string> list, Point point, int width = 10, int height = 1, string name = "ControlList") : base(point, width, height, name)
         {
             _list = list;
+            BackColor = ConsoleColor.Yellow;
+            TextColor = ConsoleColor.Red;
         }
+
+        public ConsoleColor BackColor { get; set; }
+        public ConsoleColor TextColor { get; set; }
 
         public override void Drow()
         {
+            ConsoleColor defaultBackgroundColor = Console.BackgroundColor;
+            ConsoleColor defaultTextColor = Console.ForegroundColor;
             int number = 0;
 
-            foreach (var element in _list)
+            for (int i = 0; i < _list.Count; i++)
             {
-                Display.Print($"{++number}. {element}", Point);
+                if (i == _selectedElement)
+                {
+                    Console.BackgroundColor = BackColor;
+                    Display.Print($"{++number}. {_list[i]}\n", new Point(Point.X, i), TextColor);
+                    Console.BackgroundColor = defaultBackgroundColor;
+                    Console.ForegroundColor = defaultTextColor;
+                }
+                else
+                {
+                    Display.Print($"{++number}. {_list[i]}\n", new Point(Point.X, i));
+                }                
             }
+        }
+
+        public void SelectElement(int number)
+        {
+            _selectedElement = number;
+            Drow();
         }
     }
 
@@ -79,5 +127,4 @@ namespace lesson_19_events_practice_05
             Console.ForegroundColor = defaultColor;
         }
     }
-
 }
