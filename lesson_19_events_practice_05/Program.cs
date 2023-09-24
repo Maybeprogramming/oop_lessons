@@ -207,7 +207,6 @@
         public void SelectElement(int number)
         {
             _selectedElement = number;
-            Drow();
         }
     }
 
