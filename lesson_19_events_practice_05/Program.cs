@@ -30,6 +30,7 @@
                 "Ракета"
             };
 
+            List<Fighter> fightersSelected = new();
             List<Fighter> fighterList = new();
 
             for (int i = 0; i < nameList.Count; i++)
@@ -37,13 +38,11 @@
                 fighterList.Add(new Fighter(nameList[i]));
             }
 
-            List<Fighter> fightersSelected = new();
-
             bool isSelectedFighters = false;
-
-            List<string> selectedFighters = new();
-
             int numberSelected = 0;
+
+            var fighterListname = fighterList.Select(e => e.Name);
+
 
             ControlList controlList = new ControlList(nameList);
 
@@ -58,22 +57,21 @@
 
                 switch (consoleKey.Key)
                 {
-                    case ConsoleKey.UpArrow: numberSelected = ChangeNegative(nameList.Count, numberSelected); break;
-                    case ConsoleKey.DownArrow: numberSelected = ChangePositive(nameList.Count, numberSelected); break;
-                    case ConsoleKey.Enter: SelectHero(numberSelected, nameList, selectedFighters); break;
+                    case ConsoleKey.UpArrow: numberSelected = ChangeNegative(fighterList.Count, numberSelected); break;
+                    case ConsoleKey.DownArrow: numberSelected = ChangePositive(fighterList.Count, numberSelected); break;
+                    case ConsoleKey.Enter: SelectHero(numberSelected, fighterList, fightersSelected); break;
                 }
 
                 controlList.SelectElement(numberSelected);
 
-                if (selectedFighters.Count == 2)
+                if (fightersSelected.Count == 2)
                 {
                     Console.Clear();
                     Display.Print($"Выбранные бойцы:\n", new Point());
 
-
-                    foreach (var fighter in selectedFighters)
+                    foreach (var fighter in fightersSelected)
                     {
-                        Display.Print(fighter + "\n", new Point());
+                        Display.Print(fighter.ShowInfo() + "\n", new Point());
                     }
 
                     isSelectedFighters = true;
@@ -110,13 +108,13 @@
             }
         }
 
-        private static void SelectHero(int numberSelected, List<string> list, List<string> selectedFighters)
+        private static void SelectHero(int numberSelected, List<Fighter> listHero, List<Fighter> selectedFighters)
         {
             if (selectedFighters.Count < 2)
             {
-                selectedFighters.Add(list[numberSelected]);
+                selectedFighters.Add(listHero[numberSelected]);
                 ClearOneString();
-                Display.Print($"\nВы выбрали: {list[numberSelected]}!!!", new Point());
+                Display.Print($"\nВы выбрали: {listHero[numberSelected].ShowInfo()}!!!", new Point());
             }
         }
 
@@ -137,6 +135,11 @@
         public Fighter(string name)
         {
             Name = name;
+        }
+
+        public string ShowInfo()
+        {
+            return $"{Name}";
         }
     }
 
