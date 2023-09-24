@@ -6,7 +6,7 @@
         {
             Console.CursorVisible = false;
 
-            List<string> list = new()
+            List<string> nameList = new()
             {
                 "Валькирия",
                 "Алькатрон",
@@ -30,13 +30,22 @@
                 "Ракета"
             };
 
+            List<Fighter> fighterList = new();
+
+            for (int i = 0; i < nameList.Count; i++)
+            {
+                fighterList.Add(new Fighter(nameList[i]));
+            }
+
+            List<Fighter> fightersSelected = new();
+
             bool isSelectedFighters = false;
 
             List<string> selectedFighters = new();
 
             int numberSelected = 0;
 
-            ControlList controlList = new ControlList(list);
+            ControlList controlList = new ControlList(nameList);
 
             while (isSelectedFighters == false)
             {
@@ -49,9 +58,9 @@
 
                 switch (consoleKey.Key)
                 {
-                    case ConsoleKey.UpArrow: numberSelected = ChangeNegative(list.Count, numberSelected); break;
-                    case ConsoleKey.DownArrow: numberSelected = ChangePositive(list.Count, numberSelected); break;
-                    case ConsoleKey.Enter: SelectHero(numberSelected, list, selectedFighters); break;
+                    case ConsoleKey.UpArrow: numberSelected = ChangeNegative(nameList.Count, numberSelected); break;
+                    case ConsoleKey.DownArrow: numberSelected = ChangePositive(nameList.Count, numberSelected); break;
+                    case ConsoleKey.Enter: SelectHero(numberSelected, nameList, selectedFighters); break;
                 }
 
                 controlList.SelectElement(numberSelected);
@@ -118,6 +127,16 @@
             Console.WriteLine("\n" + new string(' ', 40));
             Console.CursorLeft = left;
             Console.CursorTop = top;
+        }
+    }
+
+    class Fighter
+    {
+        public string Name { get; private set; }
+
+        public Fighter(string name)
+        {
+            Name = name;
         }
     }
 
