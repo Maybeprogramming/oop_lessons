@@ -1,8 +1,4 @@
-﻿using System.Diagnostics.Metrics;
-using System.Security.Principal;
-using static System.Net.Mime.MediaTypeNames;
-
-namespace lesson_19_events_practice_05
+﻿namespace lesson_19_events_practice_05
 {
     class Program
     {
@@ -34,12 +30,12 @@ namespace lesson_19_events_practice_05
 
             int numberSelected = 0;
 
-            Console.WriteLine("Меню:");
             ControlList controlList = new ControlList(list, new Point(0, 1));
+            Console.WriteLine("Меню:");
             controlList.Drow();
 
             while (true)
-            {   
+            {
                 ConsoleKeyInfo consoleKey;
                 consoleKey = Console.ReadKey();
 
@@ -49,11 +45,12 @@ namespace lesson_19_events_practice_05
                     case ConsoleKey.DownArrow: numberSelected = ChangePositive(list.Count, numberSelected); break;
                     case ConsoleKey.Enter: SelectHero(numberSelected, list); break;
                 }
-                
+
                 controlList.SelectElement(numberSelected);
 
                 Task.Delay(20).Wait();
             }
+
 
             Console.ReadLine();
         }
