@@ -31,8 +31,11 @@ namespace lesson_19_events_practice_05
                 "Ракета"
             };
 
-            ControlList controlList = new ControlList(list, new Point(0,0));
+            Display.Print("Первый\n", new Point());
+            ControlList controlList = new ControlList(list, new Point(0,1));
             controlList.SelectElement(19);
+
+            Display.Print("Второй\n", new Point());
 
             Console.ReadLine();
         }
@@ -42,21 +45,21 @@ namespace lesson_19_events_practice_05
     {
         public UserInterface(Point point, int width = 10, int height = 1, string name = "default")
         {
-            Point = point;
-            Width = width; 
+            Position = point;
+            Width = width;
             Height = height;
             Text = name;
         }
 
         public string Text { get; private set; }
         public ConsoleColor ColorText { get; set; } = ConsoleColor.White;
-        public Point Point { get; private set; }
+        public Point Position { get; private set; }
         public int Width { get; private set; }
         public int Height { get; private set; }
 
         public virtual void Drow()
         {
-            Display.Print(Text, Point, ColorText);
+            Display.Print(Text, Position, ColorText);
         }
     }
 
@@ -86,14 +89,14 @@ namespace lesson_19_events_practice_05
                 if (i == _selectedElement)
                 {
                     Console.BackgroundColor = BackColor;
-                    Display.Print($"{++number}. {_list[i]}\n", new Point(Point.X, i), TextColor);
+                    Display.Print($"{++number}. {_list[i]}\n", new Point(Position.X, Position.Y + i), TextColor);
                     Console.BackgroundColor = defaultBackgroundColor;
                     Console.ForegroundColor = defaultTextColor;
                 }
                 else
                 {
-                    Display.Print($"{++number}. {_list[i]}\n", new Point(Point.X, i));
-                }                
+                    Display.Print($"{++number}. {_list[i]}\n", new Point(Position.X, Position.Y + i));
+                }
             }
         }
 
@@ -106,21 +109,22 @@ namespace lesson_19_events_practice_05
 
     struct Point
     {
-        public int X { get => Console.CursorLeft; }
-        public int Y { get => Console.CursorTop; }
+        public int X { get; }
+        public int Y { get; }
 
         public Point(int x, int y)
         {
             Console.CursorLeft = x;
             Console.CursorTop = y;
+            X = x;
+            Y = y;
         }
     }
 
-    static class Display 
-    { 
-        public static void Print (string text, Point point, ConsoleColor consoleColor = ConsoleColor.White)
-        { 
-            Point printPoint = point;
+    static class Display
+    {
+        public static void Print(string text, Point point = new Point(), ConsoleColor consoleColor = ConsoleColor.White)
+        {
             ConsoleColor defaultColor = Console.ForegroundColor;
             Console.ForegroundColor = consoleColor;
             Console.Write($"{text}");
