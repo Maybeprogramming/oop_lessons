@@ -41,7 +41,7 @@
             bool isSelectedFighters = false;
             int numberSelected = 0;
 
-            ControlList controlList = new ControlList(nameList);
+            ControlList controlList = new ControlList(fighterList);
 
             while (isSelectedFighters == false)
             {
@@ -172,9 +172,9 @@
         private List<string> _list;
         private int _selectedElement = 0;
 
-        public ControlList(List<string> list)
+        public ControlList(List<Fighter> list)
         {
-            _list = list;
+            _list = list.Select(e => e.Name).ToList();
             BackColor = ConsoleColor.Yellow;
             TextColor = ConsoleColor.Red;
         }
