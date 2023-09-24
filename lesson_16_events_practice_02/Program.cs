@@ -17,7 +17,21 @@
                 "Железный человек",
                 "Тор",
                 "Халк",
-                "Вдова"
+                "Черная вдова",
+                "Стрела",
+                "Человек муравей",
+                "Алая ведьма",
+                "Черная пантера",
+                "Доктор Стрэнж",
+                "Грут",
+                "Вижен",
+                "Звездный лорд",
+                "Зимний солдат",
+                "Локи",
+                "Гамора",
+                "Дедпул",
+                "Дракс",
+                "Ракета"
             };
 
             selectedHero += OnSelectedHero;
@@ -32,7 +46,7 @@
 
                 switch (consoleKey.Key)
                 {
-                    case ConsoleKey.UpArrow: numberSelected = ChangeNegative(numberSelected); break;
+                    case ConsoleKey.UpArrow: numberSelected = ChangeNegative(list.Count, numberSelected); break;
                     case ConsoleKey.DownArrow: numberSelected = ChangePositive(list.Count, numberSelected); break;
                     case ConsoleKey.Enter: LetsGoToDance(numberSelected, list); break;
                 }
@@ -62,7 +76,7 @@
 
         public static void OnSelectedHero(string hero)
         {
-            Console.CursorTop = 10;
+            Console.CursorTop = 23;
 
             int left = Console.CursorLeft;
             int top = Console.CursorTop;
@@ -106,15 +120,15 @@
             }
             else
             {
-                return counter;
+                return counter = 0;
             }
         }
 
-        static int ChangeNegative(int counter)
+        static int ChangeNegative(int listCount, int counter)
         {
             if (counter <= 0)
             {
-                return counter;
+                return counter = listCount - 1;
             }
             else
             {
