@@ -6,6 +6,7 @@
         {
             Console.CursorVisible = false;
             KeyboardControl keyboardControl = new KeyboardControl();
+            keyboardControl.OnEnable();
 
             List<string> nameList = new()
             {
@@ -42,9 +43,7 @@
             bool isSelectedFighters = false;
             FightersListBar controlList = new FightersListBar(fighterList);
 
-            keyboardControl.UpArrowKeyPressed += FightersListBar.ChangeSelectElement;
-            keyboardControl.DownArrowKeyPressed += FightersListBar.ChangeSelectElement;
-            keyboardControl.EnterKeyPressed += FightersListBar.ChangeSelectElement;
+
 
             while (isSelectedFighters == false)
             {
@@ -146,7 +145,7 @@
             }
         }
 
-        public static void ChangeSelectElement(object? sender, KeyboardEventArgs e)
+        public static void OnPressKey(object? sender, KeyboardEventArgs e)
         {
             if (e.Key == ConsoleKey.UpArrow)
             {
@@ -222,6 +221,20 @@
                     EnterKeyPressed?.Invoke(this, new KeyboardEventArgs(consoleKey.Key));
                     break;
             }
+        }
+
+        public void OnEnable()
+        {
+            UpArrowKeyPressed += FightersListBar.OnPressKey;
+            DownArrowKeyPressed += FightersListBar.OnPressKey;
+            EnterKeyPressed += FightersListBar.OnPressKey;
+        }
+
+        public void OnDisable()
+        {
+            UpArrowKeyPressed -= FightersListBar.OnPressKey;
+            DownArrowKeyPressed -= FightersListBar.OnPressKey;
+            EnterKeyPressed -= FightersListBar.OnPressKey;
         }
     }
 
