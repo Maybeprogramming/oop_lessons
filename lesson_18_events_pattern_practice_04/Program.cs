@@ -1,6 +1,5 @@
 ﻿namespace lesson_18_events_pattern_practice_04
 {
-
     class Program
     {
         static void Main()
