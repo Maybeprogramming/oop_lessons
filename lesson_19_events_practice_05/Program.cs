@@ -5,6 +5,7 @@
         static void Main()
         {
             Console.CursorVisible = false;
+            KeyboardControl keyboardControl = new KeyboardControl();
 
             List<string> nameList = new()
             {
@@ -43,31 +44,22 @@
 
             FightersListBar controlList = new FightersListBar(fighterList);
 
+            keyboardControl.UpArrowKeyPressed += FightersListBar.ChangeSelectElement;
+            keyboardControl.DownArrowKeyPressed += FightersListBar.ChangeSelectElement;
+            //keyboardControl.EnterKeyPressed += Program.SelectHero;
+
             while (isSelectedFighters == false)
             {
                 Display.Print($"Список бойцов для выбора:", new Point(0, 0));
                 controlList.SetPosition(new Point(0, 1));
                 controlList.Drow();
 
-                ConsoleKeyInfo consoleKey;
-                consoleKey = Console.ReadKey();
+                keyboardControl.WaitReadKey();
 
-                switch (consoleKey.Key)
-                {
-                    case ConsoleKey.UpArrow:
-                        numberSelected = ChangeNegative(fighterList.Count, numberSelected);
-                        break;
-
-                    case ConsoleKey.DownArrow:
-                        numberSelected = ChangePositive(fighterList.Count, numberSelected);
-                        break;
-
-                    case ConsoleKey.Enter:
-                        SelectHero(numberSelected, fighterList, fightersSelected);
-                        break;
-                }
-
-                controlList.SelectElement(numberSelected);
+                //    case ConsoleKey.Enter:
+                //        SelectHero(numberSelected, fighterList, fightersSelected);
+                //        break;
+                //}
 
                 if (fightersSelected.Count == 2)
                 {
@@ -89,31 +81,7 @@
             Console.ReadLine();
         }
 
-        private static int ChangePositive(int listCount, int counter)
-        {
-            if (counter < listCount - 1)
-            {
-                return ++counter;
-            }
-            else
-            {
-                return counter = 0;
-            }
-        }
-
-        private static int ChangeNegative(int listCount, int counter)
-        {
-            if (counter <= 0)
-            {
-                return counter = listCount - 1;
-            }
-            else
-            {
-                return --counter;
-            }
-        }
-
-        private static void SelectHero(int numberSelected, List<Fighter> listHero, List<Fighter> selectedFighters)
+        public static void SelectHero(int numberSelected, List<Fighter> listHero, List<Fighter> selectedFighters)
         {
             if (selectedFighters.Count < 2)
             {
@@ -204,18 +172,13 @@
             }
         }
 
-        public void SelectElement(int number)
+        public static void ChangeSelectElement(object sender, KeyboardEventArgs e)
         {
-            _selectedElement = number;
-        }
-
-        public static void SelectElement1(object sender, KeyboardEventArgs e)
-        {
-            if (e.Number == -1)
+            if (e.Key == ConsoleKey.UpArrow)
             {
                 _selectedElement = ChangeNegative(_list.Count, _selectedElement);
             }
-            else if (e.Number == 1)
+            else if (e.Key == ConsoleKey.DownArrow)
             {
                 _selectedElement = ChangePositive(_list.Count, _selectedElement);
             }
@@ -248,48 +211,40 @@
 
     class KeyboardControl
     {
-        public KeyboardControl()
-        {
-            UpArrowKeyPressed += FightersListBar.
-        }
-
         public event EventHandler<KeyboardEventArgs>? UpArrowKeyPressed;
         public event EventHandler<KeyboardEventArgs>? DownArrowKeyPressed;
         public event EventHandler<KeyboardEventArgs>? EnterKeyPressed;
 
-        public void Work()
+        public void WaitReadKey()
         {
-            while (true)
+            ConsoleKeyInfo consoleKey;
+            consoleKey = Console.ReadKey();
+
+            switch (consoleKey.Key)
             {
-                ConsoleKeyInfo consoleKey;
-                consoleKey = Console.ReadKey();
+                case ConsoleKey.UpArrow:
+                    UpArrowKeyPressed?.Invoke(this, new KeyboardEventArgs(consoleKey.Key));
+                    break;
 
-                switch (consoleKey.Key)
-                {
-                    case ConsoleKey.UpArrow:
-                        UpArrowKeyPressed.Invoke(this, new KeyboardEventArgs(1));
-                        break;
+                case ConsoleKey.DownArrow:
+                    DownArrowKeyPressed?.Invoke(this, new KeyboardEventArgs(consoleKey.Key));
+                    break;
 
-                    case ConsoleKey.DownArrow:
-                        DownArrowKeyPressed.Invoke(this, new KeyboardEventArgs(-1));
-                        break;
-
-                    case ConsoleKey.Enter:
-                        EnterKeyPressed.Invoke(this, new KeyboardEventArgs(0));
-                        break;
-                }
+                case ConsoleKey.Enter:
+                    EnterKeyPressed?.Invoke(this, new KeyboardEventArgs(consoleKey.Key));
+                    break;
             }
         }
     }
 
     public class KeyboardEventArgs : EventArgs
     {
-        public KeyboardEventArgs(int number)
+        public KeyboardEventArgs(ConsoleKey key)
         {
-            Number = number;
+            Key = key;
         }
 
-        public int Number { get; }
+        public ConsoleKey Key { get; }
     }
 
     struct Point
