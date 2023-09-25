@@ -43,8 +43,6 @@
             bool isSelectedFighters = false;
             FightersListBar controlList = new FightersListBar(fighterList);
 
-
-
             while (isSelectedFighters == false)
             {
                 Display.Print($"Список бойцов для выбора:", new Point(0, 0));
