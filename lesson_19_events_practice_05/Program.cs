@@ -54,16 +54,16 @@
 
                 switch (consoleKey.Key)
                 {
-                    case ConsoleKey.UpArrow: 
-                        numberSelected = ChangeNegative(fighterList.Count, numberSelected); 
+                    case ConsoleKey.UpArrow:
+                        numberSelected = ChangeNegative(fighterList.Count, numberSelected);
                         break;
 
-                    case ConsoleKey.DownArrow: 
-                        numberSelected = ChangePositive(fighterList.Count, numberSelected); 
+                    case ConsoleKey.DownArrow:
+                        numberSelected = ChangePositive(fighterList.Count, numberSelected);
                         break;
 
-                    case ConsoleKey.Enter: 
-                        SelectHero(numberSelected, fighterList, fightersSelected); 
+                    case ConsoleKey.Enter:
+                        SelectHero(numberSelected, fighterList, fightersSelected);
                         break;
                 }
 
@@ -169,8 +169,8 @@
 
     class FightersListBar : UserInterface
     {
-        private List<string> _list;
-        private int _selectedElement = 0;
+        private static List<string> _list;
+        private static int _selectedElement = 0;
 
         public FightersListBar(List<Fighter> list)
         {
@@ -208,6 +208,88 @@
         {
             _selectedElement = number;
         }
+
+        public static void SelectElement1(object sender, KeyboardEventArgs e)
+        {
+            if (e.Number == -1)
+            {
+                _selectedElement = ChangeNegative(_list.Count, _selectedElement);
+            }
+            else if (e.Number == 1)
+            {
+                _selectedElement = ChangePositive(_list.Count, _selectedElement);
+            }
+        }
+
+        private static int ChangePositive(int listCount, int counter)
+        {
+            if (counter < listCount - 1)
+            {
+                return ++counter;
+            }
+            else
+            {
+                return counter = 0;
+            }
+        }
+
+        private static int ChangeNegative(int listCount, int counter)
+        {
+            if (counter <= 0)
+            {
+                return counter = listCount - 1;
+            }
+            else
+            {
+                return --counter;
+            }
+        }
+    }
+
+    class KeyboardControl
+    {
+        public KeyboardControl()
+        {
+            UpArrowKeyPressed += FightersListBar.
+        }
+
+        public event EventHandler<KeyboardEventArgs>? UpArrowKeyPressed;
+        public event EventHandler<KeyboardEventArgs>? DownArrowKeyPressed;
+        public event EventHandler<KeyboardEventArgs>? EnterKeyPressed;
+
+        public void Work()
+        {
+            while (true)
+            {
+                ConsoleKeyInfo consoleKey;
+                consoleKey = Console.ReadKey();
+
+                switch (consoleKey.Key)
+                {
+                    case ConsoleKey.UpArrow:
+                        UpArrowKeyPressed.Invoke(this, new KeyboardEventArgs(1));
+                        break;
+
+                    case ConsoleKey.DownArrow:
+                        DownArrowKeyPressed.Invoke(this, new KeyboardEventArgs(-1));
+                        break;
+
+                    case ConsoleKey.Enter:
+                        EnterKeyPressed.Invoke(this, new KeyboardEventArgs(0));
+                        break;
+                }
+            }
+        }
+    }
+
+    public class KeyboardEventArgs : EventArgs
+    {
+        public KeyboardEventArgs(int number)
+        {
+            Number = number;
+        }
+
+        public int Number { get; }
     }
 
     struct Point
