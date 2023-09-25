@@ -40,13 +40,11 @@
             }
 
             bool isSelectedFighters = false;
-            int numberSelected = 0;
-
             FightersListBar controlList = new FightersListBar(fighterList);
 
             keyboardControl.UpArrowKeyPressed += FightersListBar.ChangeSelectElement;
             keyboardControl.DownArrowKeyPressed += FightersListBar.ChangeSelectElement;
-            //keyboardControl.EnterKeyPressed += Program.SelectHero;
+            keyboardControl.EnterKeyPressed += FightersListBar.ChangeSelectElement;
 
             while (isSelectedFighters == false)
             {
@@ -55,11 +53,6 @@
                 controlList.Drow();
 
                 keyboardControl.WaitReadKey();
-
-                //    case ConsoleKey.Enter:
-                //        SelectHero(numberSelected, fighterList, fightersSelected);
-                //        break;
-                //}
 
                 if (fightersSelected.Count == 2)
                 {
@@ -79,25 +72,6 @@
 
             Console.WriteLine("\nПрограмма завершена!!!");
             Console.ReadLine();
-        }
-
-        public static void SelectHero(int numberSelected, List<Fighter> listHero, List<Fighter> selectedFighters)
-        {
-            if (selectedFighters.Count < 2)
-            {
-                selectedFighters.Add(listHero[numberSelected]);
-                ClearOneString();
-                Display.Print($"\nВы выбрали: {listHero[numberSelected].ShowInfo()}!!!");
-            }
-        }
-
-        private static void ClearOneString()
-        {
-            int left = Console.CursorLeft;
-            int top = Console.CursorTop;
-            Console.WriteLine("\n" + new string(' ', 40));
-            Console.CursorLeft = left;
-            Console.CursorTop = top;
         }
     }
 
@@ -172,7 +146,7 @@
             }
         }
 
-        public static void ChangeSelectElement(object sender, KeyboardEventArgs e)
+        public static void ChangeSelectElement(object? sender, KeyboardEventArgs e)
         {
             if (e.Key == ConsoleKey.UpArrow)
             {
@@ -182,6 +156,20 @@
             {
                 _selectedElement = ChangePositive(_list.Count, _selectedElement);
             }
+            else if (e.Key == ConsoleKey.Enter)
+            {
+                ClearOneString();
+                Display.Print($"Вы выбрали: {_list[_selectedElement]}!");
+            }
+        }
+
+        private static void ClearOneString()
+        {
+            int left = Console.CursorLeft;
+            int top = Console.CursorTop;
+            Console.WriteLine(new string(' ', 40));
+            Console.CursorLeft = left;
+            Console.CursorTop = top;
         }
 
         private static int ChangePositive(int listCount, int counter)
