@@ -5,7 +5,7 @@
         static void Main()
         {
             Console.CursorVisible = false;
-            KeyboardControl keyboardControl = new KeyboardControl();
+            KeyboardControl keyboardControl = new KeyboardControl(); 
             keyboardControl.OnEnable();
 
             List<string> nameList = new()
