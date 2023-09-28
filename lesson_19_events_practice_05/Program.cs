@@ -6,10 +6,74 @@
         {
             Console.WindowWidth = 100;
             Console.CursorVisible = false;
+
+            BattleField battleField = new();
+
+            battleField.BeginBattle();
+            
+        }
+    }
+
+    class BattleField
+    {
+        private List<Fighter> _availableFighters;
+        private List<Fighter> _selectedFighters;
+
+        public BattleField()
+        {
+            _availableFighters = FillFightersList();
+            _selectedFighters = new();
+        }
+
+        public void BeginBattle()
+        {
+            bool isSelectedFighters = false;
+            ListBar controlList = new ListBar(_availableFighters);
+
             KeyboardControl keyboardControl = new KeyboardControl();
             keyboardControl.OnEnable();
-            Random random = new Random();
 
+            while (isSelectedFighters == false)
+            {
+                Display.Print($"Список бойцов для выбора:", new Point(0, 0));
+                controlList.SetPosition(new Point(0, 1));
+                controlList.Drow();
+
+                keyboardControl.WaitReadKey();
+
+                if (_selectedFighters.Count == 2)
+                {
+                    Console.Clear();
+                    Display.Print($"Выбранные бойцы:\n");
+
+                    foreach (var fighter in _selectedFighters)
+                    {
+                        Display.Print(fighter.ShowInfo() + "\n");
+                    }
+
+                    isSelectedFighters = true;
+                }
+
+                Task.Delay(20).Wait();
+            }
+
+            Console.WriteLine("\nПрограмма завершена!!!");
+            Console.ReadLine();
+        }
+
+        public void ChooseFighter(int numberFighter)
+        {
+
+        }
+
+        public void CheckVictory()
+        {
+
+        }
+
+        private List<Fighter> FillFightersList()
+        {
+            Random random = new Random();
             List<string> nameList = new()
             {
                 "Валькирия",
@@ -33,65 +97,14 @@
                 "Дракс",
                 "Ракета"
             };
-
-            List<Fighter> fightersSelected = new();
-            List<Fighter> fighterList = new();
+            _availableFighters = new List<Fighter>();
 
             for (int i = 0; i < nameList.Count; i++)
             {
-                fighterList.Add(new Fighter(nameList[i], random.Next(20, 30), random.Next(5, 15), random.Next(100, 150)));
+                _availableFighters.Add(new Fighter(nameList[i], random.Next(20, 30), random.Next(5, 15), random.Next(100, 150)));
             }
 
-            bool isSelectedFighters = false;
-            ListBar controlList = new ListBar(fighterList);
-
-            while (isSelectedFighters == false)
-            {
-                Display.Print($"Список бойцов для выбора:", new Point(0, 0));
-                controlList.SetPosition(new Point(0, 1));
-                controlList.Drow();
-
-                keyboardControl.WaitReadKey();
-
-                if (fightersSelected.Count == 2)
-                {
-                    Console.Clear();
-                    Display.Print($"Выбранные бойцы:\n");
-
-                    foreach (var fighter in fightersSelected)
-                    {
-                        Display.Print(fighter.ShowInfo() + "\n");
-                    }
-
-                    isSelectedFighters = true;
-                }
-
-                Task.Delay(20).Wait();
-            }
-
-            Console.WriteLine("\nПрограмма завершена!!!");
-            Console.ReadLine();
-        }
-    }
-
-    class BattleField
-    {
-        private List<Fighter> _availableFighters;
-        private List<Fighter> _selectedFighters;
-
-        public void BeginBattle()
-        {
-
-        }
-
-        public void ChooseFighter()
-        {
-
-        }
-
-        public void CheckVictory()
-        {
-
+            return _availableFighters;
         }
     }
 
@@ -170,8 +183,8 @@
             TextColor = ConsoleColor.Red;
         }
 
-        public ConsoleColor BackColor { get; set; }
-        public ConsoleColor TextColor { get; set; }
+        public ConsoleColor BackColor { get; private set; }
+        public ConsoleColor TextColor { get; private set; }
 
         public override void Drow()
         {
@@ -209,7 +222,7 @@
             }
         }
 
-        public static void OnPressKey(object? sender, KeyboardEventArgs e)
+        public static void OnChangeActiveElement(object? sender, KeyboardEventArgs e)
         {
             if (e.Key == ConsoleKey.UpArrow)
             {
@@ -289,16 +302,16 @@
 
         public void OnEnable()
         {
-            UpArrowKeyPressed += ListBar.OnPressKey;
-            DownArrowKeyPressed += ListBar.OnPressKey;
-            EnterKeyPressed += ListBar.OnPressKey;
+            UpArrowKeyPressed += ListBar.OnChangeActiveElement;
+            DownArrowKeyPressed += ListBar.OnChangeActiveElement;
+            EnterKeyPressed += ListBar.OnChangeActiveElement;
         }
 
         public void OnDisable()
         {
-            UpArrowKeyPressed -= ListBar.OnPressKey;
-            DownArrowKeyPressed -= ListBar.OnPressKey;
-            EnterKeyPressed -= ListBar.OnPressKey;
+            UpArrowKeyPressed -= ListBar.OnChangeActiveElement;
+            DownArrowKeyPressed -= ListBar.OnChangeActiveElement;
+            EnterKeyPressed -= ListBar.OnChangeActiveElement;
         }
     }
 
