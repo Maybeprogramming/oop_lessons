@@ -10,7 +10,7 @@
             BattleField battleField = new();
 
             battleField.BeginBattle();
-            
+
         }
     }
 
@@ -18,6 +18,7 @@
     {
         private List<Fighter> _availableFighters;
         private List<Fighter> _selectedFighters;
+        private bool isSelectedFighters = false;
 
         public BattleField()
         {
@@ -27,35 +28,28 @@
 
         public void BeginBattle()
         {
-            bool isSelectedFighters = false;
+
             ListBar controlList = new ListBar(_availableFighters);
+            ListBar.SelectedElement += ChooseFighter;
 
             KeyboardControl keyboardControl = new KeyboardControl();
-            keyboardControl.OnEnable();
+            keyboardControl.Enable();
 
             while (isSelectedFighters == false)
             {
                 Display.Print($"Список бойцов для выбора:", new Point(0, 0));
                 controlList.SetPosition(new Point(0, 1));
                 controlList.Drow();
-
                 keyboardControl.WaitReadKey();
-
-                if (_selectedFighters.Count == 2)
-                {
-                    Console.Clear();
-                    Display.Print($"Выбранные бойцы:\n");
-
-                    foreach (var fighter in _selectedFighters)
-                    {
-                        Display.Print(fighter.ShowInfo() + "\n");
-                    }
-
-                    isSelectedFighters = true;
-                }
-
                 Task.Delay(20).Wait();
             }
+
+            Fighter fighter1 = _selectedFighters[0];
+            Fighter fighter2 = _selectedFighters[1];
+
+            fighter1.Attack(fighter2);
+            fighter2.Attack(fighter1);
+            
 
             Console.WriteLine("\nПрограмма завершена!!!");
             Console.ReadLine();
@@ -63,12 +57,41 @@
 
         public void ChooseFighter(int numberFighter)
         {
+            Console.WriteLine(numberFighter);
 
+            if (_selectedFighters.Count < 2)
+            {
+                _selectedFighters.Add(_availableFighters[numberFighter]);
+            }
+            else if (_selectedFighters.Count == 2)
+            {
+                Console.Clear();
+                Display.Print($"Выбранные бойцы:\n");
+
+                foreach (var fighter in _selectedFighters)
+                {
+                    Display.Print(fighter.ShowInfo() + "\n");
+                }
+
+                isSelectedFighters = true;
+                ListBar.SelectedElement -= ChooseFighter;
+            }
         }
 
-        public void CheckVictory()
+        public void CheckVictory(Fighter fighter1, Fighter fighter2)
         {
-
+            if (fighter1.IsAlive == false && fighter2.IsAlive == false)
+            {
+                Display.Print($"Ничья! Оба бойца пали");
+            }
+            else if (fighter1.IsAlive == true && fighter2.IsAlive == false)
+            {
+                Display.Print($"{fighter1.Name} - победил в этом сражении");
+            }
+            else if (fighter1.IsAlive == false && fighter2.IsAlive == true)
+            {
+                Display.Print($"{fighter2.Name} - победил в этом сражении");
+            }
         }
 
         private List<Fighter> FillFightersList()
@@ -174,6 +197,7 @@
         private static List<Fighter> _list;
         private static int _activeElement = 0;
         private static int _elementsCount;
+        public static event Action<int>? SelectedElement;
 
         public ListBar(List<Fighter> list)
         {
@@ -236,6 +260,7 @@
             {
                 ClearOneString();
                 Display.Print($"Вы выбрали: {_list[_activeElement].Name}!");
+                SelectedElement?.Invoke(_activeElement);
             }
         }
 
@@ -300,7 +325,7 @@
             }
         }
 
-        public void OnEnable()
+        public void Enable()
         {
             UpArrowKeyPressed += ListBar.OnChangeActiveElement;
             DownArrowKeyPressed += ListBar.OnChangeActiveElement;
