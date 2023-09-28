@@ -194,7 +194,7 @@
         {
             int left = Console.CursorLeft;
             int top = Console.CursorTop;
-            Console.WriteLine(new string(' ', 40));
+            Console.WriteLine(new string(' ', 50));
             Console.CursorLeft = left;
             Console.CursorTop = top;
         }
