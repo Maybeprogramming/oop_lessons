@@ -173,6 +173,7 @@
 
     class Fighter
     {
+        private int _health;
         public Fighter(string name, int damage, int armor, int health)
         {
             Name = name;
@@ -184,7 +185,21 @@
         public string Name { get; private set; }
         public int Damage { get; private set; }
         public int Armor { get; private set; }
-        public int Health { get; private set; }
+        public int Health
+        {
+            get { return _health; }
+            private set 
+            { 
+                if (value <= 0)
+                {
+                    _health = 0;
+                }
+                else
+                {
+                    _health = value;
+                }
+            }
+        }
         public bool IsAlive { get => Health > 0; }
 
         public void TakeDamage(int damage)
@@ -192,10 +207,6 @@
             if (Health > 0)
             {
                 Health -= damage - Armor;
-            }
-            else
-            {
-                Health = 0;
             }
 
             Console.Write($"{Name} получил {damage} урона. Осталось здоровья: {Health}\n");
