@@ -123,7 +123,7 @@
             }
         }
 
-        public void Attack (Fighter target)
+        public void Attack(Fighter target)
         {
             if (target.IsAlive == true)
             {
@@ -179,14 +179,14 @@
             ConsoleColor defaultTextColor = Console.ForegroundColor;
             int number = 0;
 
-            for (int i = 0; i < _list.Count; i++)
+            for (int i = 0; i < _elementsCount; i++)
             {
                 if (i == _activeElement)
                 {
                     Console.BackgroundColor = BackColor;
 
                     Display.Print($"{++number}. {_list[i].Name} | Stats: ", new Point(Position.X, Position.Y + i), TextColor);
-                    Display.Print($"{_list[i].Health}",new Point(),ConsoleColor.Green);
+                    Display.Print($"{_list[i].Health}", new Point(), ConsoleColor.Green);
                     Display.Print($" HP ", new Point(), TextColor);
                     Display.Print($"{_list[i].Damage}", new Point(), ConsoleColor.Red);
                     Display.Print($" DMG ", new Point(), TextColor);
