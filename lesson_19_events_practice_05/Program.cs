@@ -175,7 +175,7 @@
 
         public void Attack(Fighter target)
         {
-            if (target.IsAlive == true)
+            if (IsAlive == true && target.IsAlive == true)
             {
                 target.TakeDamage(Damage);
             }
