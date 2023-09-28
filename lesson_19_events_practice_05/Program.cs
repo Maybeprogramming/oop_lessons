@@ -4,8 +4,9 @@
     {
         static void Main()
         {
+            Console.WindowWidth = 100;
             Console.CursorVisible = false;
-            KeyboardControl keyboardControl = new KeyboardControl(); 
+            KeyboardControl keyboardControl = new KeyboardControl();
             keyboardControl.OnEnable();
             Random random = new Random();
 
@@ -108,6 +109,27 @@
         public int Damage { get; private set; }
         public int Armor { get; private set; }
         public int Health { get; private set; }
+        public bool IsAlive { get => Health > 0; }
+
+        public void TakeDamage(int damage)
+        {
+            if (Health > 0)
+            {
+                Health -= damage - Armor;
+            }
+            else
+            {
+                Health = 0;
+            }
+        }
+
+        public void Attack (Fighter target)
+        {
+            if (target.IsAlive == true)
+            {
+                target.TakeDamage(Damage);
+            }
+        }
 
         public string ShowInfo()
         {
@@ -136,13 +158,13 @@
 
     class ListBar : UserInterface
     {
-        private static List<string> _list;
+        private static List<Fighter> _list;
         private static int _activeElement = 0;
         private static int _elementsCount;
 
         public ListBar(List<Fighter> list)
         {
-            _list = list.Select(e => e.Name).ToList();
+            _list = list;
             _elementsCount = _list.Count;
             BackColor = ConsoleColor.Yellow;
             TextColor = ConsoleColor.Red;
@@ -162,13 +184,27 @@
                 if (i == _activeElement)
                 {
                     Console.BackgroundColor = BackColor;
-                    Display.Print($"{++number}. {_list[i]}\n", new Point(Position.X, Position.Y + i), TextColor);
+
+                    Display.Print($"{++number}. {_list[i].Name} | Stats: ", new Point(Position.X, Position.Y + i), TextColor);
+                    Display.Print($"{_list[i].Health}",new Point(),ConsoleColor.Green);
+                    Display.Print($" HP ", new Point(), TextColor);
+                    Display.Print($"{_list[i].Damage}", new Point(), ConsoleColor.Red);
+                    Display.Print($" DMG ", new Point(), TextColor);
+                    Display.Print($"{_list[i].Armor}", new Point(), ConsoleColor.Blue);
+                    Display.Print($" ARMOR\n", new Point(), TextColor);
+
                     Console.BackgroundColor = defaultBackgroundColor;
                     Console.ForegroundColor = defaultTextColor;
                 }
                 else
                 {
-                    Display.Print($"{++number}. {_list[i]}\n", new Point(Position.X, Position.Y + i));
+                    Display.Print($"{++number}. {_list[i].Name} | Stats: ", new Point(Position.X, Position.Y + i));
+                    Display.Print($"{_list[i].Health}", new Point(), ConsoleColor.Green);
+                    Display.Print($" HP ");
+                    Display.Print($"{_list[i].Damage}", new Point(), ConsoleColor.Red);
+                    Display.Print($" DMG ");
+                    Display.Print($"{_list[i].Armor}", new Point(), ConsoleColor.Blue);
+                    Display.Print($" ARMOR\n");
                 }
             }
         }
@@ -186,7 +222,7 @@
             else if (e.Key == ConsoleKey.Enter)
             {
                 ClearOneString();
-                Display.Print($"Вы выбрали: {_list[_activeElement]}!");
+                Display.Print($"Вы выбрали: {_list[_activeElement].Name}!");
             }
         }
 
