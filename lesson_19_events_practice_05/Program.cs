@@ -90,13 +90,18 @@
 
             while (true)
             {
-                if (delayCicle == 0) return;
+                if (delayCicle == 0)
+                {
+                    Console.Write('|');
+                    return;
+                }
+
                 Console.Write('|');
-                Task.Delay(100).Wait();
+                Task.Delay(50).Wait();
                 Console.Write('/');
-                Task.Delay(100).Wait();
+                Task.Delay(50).Wait();
                 Console.Write('-');
-                Task.Delay(100).Wait();
+                Task.Delay(50).Wait();
                 Console.Write('\\');
                 delayCicle--;
             }
@@ -188,8 +193,8 @@
         public int Health
         {
             get { return _health; }
-            private set 
-            { 
+            private set
+            {
                 if (value <= 0)
                 {
                     _health = 0;
