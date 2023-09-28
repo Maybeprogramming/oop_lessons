@@ -41,7 +41,7 @@
             }
 
             bool isSelectedFighters = false;
-            FightersListBar controlList = new FightersListBar(fighterList);
+            ListBar controlList = new ListBar(fighterList);
 
             while (isSelectedFighters == false)
             {
@@ -106,12 +106,12 @@
         }
     }
 
-    class FightersListBar : UserInterface
+    class ListBar : UserInterface
     {
         private static List<string> _list;
-        private static int _selectedElement = 0;
+        private static int _activeElement = 0;
 
-        public FightersListBar(List<Fighter> list)
+        public ListBar(List<Fighter> list)
         {
             _list = list.Select(e => e.Name).ToList();
             BackColor = ConsoleColor.Yellow;
@@ -129,7 +129,7 @@
 
             for (int i = 0; i < _list.Count; i++)
             {
-                if (i == _selectedElement)
+                if (i == _activeElement)
                 {
                     Console.BackgroundColor = BackColor;
                     Display.Print($"{++number}. {_list[i]}\n", new Point(Position.X, Position.Y + i), TextColor);
@@ -147,16 +147,16 @@
         {
             if (e.Key == ConsoleKey.UpArrow)
             {
-                _selectedElement = ChangeNegative(_list.Count, _selectedElement);
+                _activeElement = ChangeNegative(_list.Count, _activeElement);
             }
             else if (e.Key == ConsoleKey.DownArrow)
             {
-                _selectedElement = ChangePositive(_list.Count, _selectedElement);
+                _activeElement = ChangePositive(_list.Count, _activeElement);
             }
             else if (e.Key == ConsoleKey.Enter)
             {
                 ClearOneString();
-                Display.Print($"Вы выбрали: {_list[_selectedElement]}!");
+                Display.Print($"Вы выбрали: {_list[_activeElement]}!");
             }
         }
 
@@ -223,16 +223,16 @@
 
         public void OnEnable()
         {
-            UpArrowKeyPressed += FightersListBar.OnPressKey;
-            DownArrowKeyPressed += FightersListBar.OnPressKey;
-            EnterKeyPressed += FightersListBar.OnPressKey;
+            UpArrowKeyPressed += ListBar.OnPressKey;
+            DownArrowKeyPressed += ListBar.OnPressKey;
+            EnterKeyPressed += ListBar.OnPressKey;
         }
 
         public void OnDisable()
         {
-            UpArrowKeyPressed -= FightersListBar.OnPressKey;
-            DownArrowKeyPressed -= FightersListBar.OnPressKey;
-            EnterKeyPressed -= FightersListBar.OnPressKey;
+            UpArrowKeyPressed -= ListBar.OnPressKey;
+            DownArrowKeyPressed -= ListBar.OnPressKey;
+            EnterKeyPressed -= ListBar.OnPressKey;
         }
     }
 
