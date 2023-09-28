@@ -68,15 +68,18 @@
 
             CheckVictory(fighter1, fighter2);
 
-            Console.WriteLine("\nПрограмма завершена!!!");
+            Console.WriteLine("\n\nПрограмма завершена!!!");
             Console.ReadLine();
         }
 
         public void ChooseFighter(int numberFighter)
         {
-            if (_selectedFighters.Count < 2)
+            if (numberFighter >= 0 && numberFighter < _availableFighters.Count)
             {
-                _selectedFighters.Add(_availableFighters[numberFighter]);
+                if (_selectedFighters.Count < 2)
+                {
+                    _selectedFighters.Add(_availableFighters[numberFighter]);
+                }
             }
         }
 
@@ -96,7 +99,7 @@
                 Task.Delay(100).Wait();
                 Console.Write('\\');
                 delayCicle--;
-            }           
+            }
         }
 
         private void DispayChooseFighters()
@@ -195,14 +198,14 @@
                 Health = 0;
             }
 
-            Console.WriteLine($"{Name} получил {damage} урона. Осталось здоровья: {Health}");
+            Console.Write($"{Name} получил {damage} урона. Осталось здоровья: {Health}\n");
         }
 
         public void Attack(Fighter target)
         {
             if (IsAlive == true && target.IsAlive == true)
             {
-                Console.WriteLine($"{Name} атаковал {target.Name}!");
+                Console.Write($"{Name} атаковал {target.Name}! ");
                 target.TakeDamage(Damage);
             }
         }
@@ -372,7 +375,7 @@
             EnterKeyPressed += ListBar.OnChangeActiveElement;
         }
 
-        public void OnDisable()
+        public void Disable()
         {
             UpArrowKeyPressed -= ListBar.OnChangeActiveElement;
             DownArrowKeyPressed -= ListBar.OnChangeActiveElement;
