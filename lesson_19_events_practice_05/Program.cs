@@ -7,6 +7,7 @@
             Console.CursorVisible = false;
             KeyboardControl keyboardControl = new KeyboardControl(); 
             keyboardControl.OnEnable();
+            Random random = new Random();
 
             List<string> nameList = new()
             {
@@ -37,7 +38,7 @@
 
             for (int i = 0; i < nameList.Count; i++)
             {
-                fighterList.Add(new Fighter(nameList[i]));
+                fighterList.Add(new Fighter(nameList[i], random.Next(20, 30), random.Next(5, 15), random.Next(100, 150)));
             }
 
             bool isSelectedFighters = false;
@@ -72,18 +73,45 @@
         }
     }
 
+    class BattleField
+    {
+        private List<Fighter> _availableFighters;
+        private List<Fighter> _selectedFighters;
+
+        public void BeginBattle()
+        {
+
+        }
+
+        public void ChooseFighter()
+        {
+
+        }
+
+        public void CheckVictory()
+        {
+
+        }
+    }
+
     class Fighter
     {
-        public string Name { get; private set; }
-
-        public Fighter(string name)
+        public Fighter(string name, int damage, int armor, int health)
         {
             Name = name;
+            Damage = damage;
+            Armor = armor;
+            Health = health;
         }
+
+        public string Name { get; private set; }
+        public int Damage { get; private set; }
+        public int Armor { get; private set; }
+        public int Health { get; private set; }
 
         public string ShowInfo()
         {
-            return $"{Name}";
+            return $"{Name}| STATS: {Health} HP, {Damage} DMG, {Armor} ARMOR";
         }
     }
 
