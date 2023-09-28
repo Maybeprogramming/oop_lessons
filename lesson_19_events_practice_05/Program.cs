@@ -45,6 +45,9 @@
                 Task.Delay(20).Wait();
             }
 
+            DownloadArena();
+            Console.WriteLine("");
+
             Fighter fighter1 = _selectedFighters[0];
             Fighter fighter2 = _selectedFighters[1];
 
@@ -77,6 +80,25 @@
             }
         }
 
+        private void DownloadArena()
+        {
+            int delayCicle = 10;
+            Console.Write("\nЗагрузка арены ");
+
+            while (true)
+            {
+                if (delayCicle == 0) return;
+                Console.Write('|');
+                Task.Delay(100).Wait();
+                Console.Write('/');
+                Task.Delay(100).Wait();
+                Console.Write('-');
+                Task.Delay(100).Wait();
+                Console.Write('\\');
+                delayCicle--;
+            }           
+        }
+
         private void DispayChooseFighters()
         {
             Console.Clear();
@@ -89,6 +111,8 @@
 
             isSelectedFighters = true;
             ListBar.SelectedElement -= ChooseFighter;
+            Console.WriteLine("Нажмите любую клавишу чтобы начать схватку...");
+            Console.ReadLine();
         }
 
         public void CheckVictory(Fighter fighter1, Fighter fighter2)
@@ -171,13 +195,14 @@
                 Health = 0;
             }
 
-            Console.WriteLine($"{Name} - осталось здоровья: {Health}");
+            Console.WriteLine($"{Name} получил {damage} урона. Осталось здоровья: {Health}");
         }
 
         public void Attack(Fighter target)
         {
             if (IsAlive == true && target.IsAlive == true)
             {
+                Console.WriteLine($"{Name} атаковал {target.Name}!");
                 target.TakeDamage(Damage);
             }
         }
