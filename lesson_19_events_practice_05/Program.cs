@@ -30,7 +30,7 @@
             ListBar controlList = new ListBar(_availableFighters);
             ListBar.SelectedElement += ChooseFighter;
 
-            KeyboardControl keyboardControl = new KeyboardControl();
+            KeyControl keyboardControl = new KeyControl();
             keyboardControl.Enable();
 
             while (isSelectedFighters == false)
@@ -305,7 +305,7 @@
             }
         }
 
-        public static void OnChangeActiveElement(object? sender, KeyboardEventArgs e)
+        public static void OnChangeActiveElement(object? sender, KeyEventArgs e)
         {
             if (e.Key == ConsoleKey.UpArrow)
             {
@@ -327,7 +327,7 @@
         {
             int left = Console.CursorLeft;
             int top = Console.CursorTop;
-            Console.WriteLine(new string(' ', 50));
+            Console.WriteLine(new string(' ', 100));
             Console.CursorLeft = left;
             Console.CursorTop = top;
         }
@@ -357,11 +357,11 @@
         }
     }
 
-    class KeyboardControl
+    class KeyControl
     {
-        public event EventHandler<KeyboardEventArgs>? UpArrowKeyPressed;
-        public event EventHandler<KeyboardEventArgs>? DownArrowKeyPressed;
-        public event EventHandler<KeyboardEventArgs>? EnterKeyPressed;
+        public event EventHandler<KeyEventArgs>? UpArrowKeyPressed;
+        public event EventHandler<KeyEventArgs>? DownArrowKeyPressed;
+        public event EventHandler<KeyEventArgs>? EnterKeyPressed;
 
         public void WaitReadKey()
         {
@@ -371,15 +371,15 @@
             switch (consoleKey.Key)
             {
                 case ConsoleKey.UpArrow:
-                    UpArrowKeyPressed?.Invoke(this, new KeyboardEventArgs(consoleKey.Key));
+                    UpArrowKeyPressed?.Invoke(this, new KeyEventArgs(consoleKey.Key));
                     break;
 
                 case ConsoleKey.DownArrow:
-                    DownArrowKeyPressed?.Invoke(this, new KeyboardEventArgs(consoleKey.Key));
+                    DownArrowKeyPressed?.Invoke(this, new KeyEventArgs(consoleKey.Key));
                     break;
 
                 case ConsoleKey.Enter:
-                    EnterKeyPressed?.Invoke(this, new KeyboardEventArgs(consoleKey.Key));
+                    EnterKeyPressed?.Invoke(this, new KeyEventArgs(consoleKey.Key));
                     break;
             }
         }
@@ -399,9 +399,9 @@
         }
     }
 
-    public class KeyboardEventArgs : EventArgs
+    public class KeyEventArgs : EventArgs
     {
-        public KeyboardEventArgs(ConsoleKey key)
+        public KeyEventArgs(ConsoleKey key)
         {
             Key = key;
         }
