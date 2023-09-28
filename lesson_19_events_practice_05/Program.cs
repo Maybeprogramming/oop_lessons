@@ -28,7 +28,6 @@
 
         public void BeginBattle()
         {
-
             ListBar controlList = new ListBar(_availableFighters);
             ListBar.SelectedElement += ChooseFighter;
 
@@ -41,15 +40,29 @@
                 controlList.SetPosition(new Point(0, 1));
                 controlList.Drow();
                 keyboardControl.WaitReadKey();
+
+                if (_selectedFighters.Count == 2) DispayChooseFighters();
+
                 Task.Delay(20).Wait();
             }
 
             Fighter fighter1 = _selectedFighters[0];
             Fighter fighter2 = _selectedFighters[1];
 
-            fighter1.Attack(fighter2);
-            fighter2.Attack(fighter1);
-            
+            while (fighter1.IsAlive == true && fighter2.IsAlive == true)
+            {
+                if (fighter2.IsAlive == true)
+                {
+                    fighter1.Attack(fighter2);
+                }
+
+                if (fighter1.IsAlive == true)
+                {
+                    fighter2.Attack(fighter1);
+                }
+            }
+
+            CheckVictory(fighter1, fighter2);
 
             Console.WriteLine("\nПрограмма завершена!!!");
             Console.ReadLine();
@@ -57,25 +70,24 @@
 
         public void ChooseFighter(int numberFighter)
         {
-            Console.WriteLine(numberFighter);
-
             if (_selectedFighters.Count < 2)
             {
                 _selectedFighters.Add(_availableFighters[numberFighter]);
             }
-            else if (_selectedFighters.Count == 2)
+        }
+
+        private void DispayChooseFighters()
+        {
+            Console.Clear();
+            Display.Print($"Выбранные бойцы:\n");
+
+            foreach (var fighter in _selectedFighters)
             {
-                Console.Clear();
-                Display.Print($"Выбранные бойцы:\n");
-
-                foreach (var fighter in _selectedFighters)
-                {
-                    Display.Print(fighter.ShowInfo() + "\n");
-                }
-
-                isSelectedFighters = true;
-                ListBar.SelectedElement -= ChooseFighter;
+                Display.Print(fighter.Name + "\n");
             }
+
+            isSelectedFighters = true;
+            ListBar.SelectedElement -= ChooseFighter;
         }
 
         public void CheckVictory(Fighter fighter1, Fighter fighter2)
@@ -157,6 +169,8 @@
             {
                 Health = 0;
             }
+
+            Console.WriteLine($"{Name} - осталось здоровья: {Health}");
         }
 
         public void Attack(Fighter target)
