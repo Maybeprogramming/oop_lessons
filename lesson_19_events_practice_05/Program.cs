@@ -207,7 +207,7 @@
             }
             else
             {
-                return activeElement = 0;
+                return 0;
             }
         }
 
@@ -215,7 +215,7 @@
         {
             if (activeElement <= 0)
             {
-                return activeElement = _elementsCount - 1;
+                return _elementsCount - 1;
             }
             else
             {
