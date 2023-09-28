@@ -110,10 +110,12 @@
     {
         private static List<string> _list;
         private static int _activeElement = 0;
+        private static int _elementsCount;
 
         public ListBar(List<Fighter> list)
         {
             _list = list.Select(e => e.Name).ToList();
+            _elementsCount = _list.Count;
             BackColor = ConsoleColor.Yellow;
             TextColor = ConsoleColor.Red;
         }
@@ -147,11 +149,11 @@
         {
             if (e.Key == ConsoleKey.UpArrow)
             {
-                _activeElement = ChangeNegative(_list.Count, _activeElement);
+                _activeElement = ChangeNegative(_activeElement);
             }
             else if (e.Key == ConsoleKey.DownArrow)
             {
-                _activeElement = ChangePositive(_list.Count, _activeElement);
+                _activeElement = ChangePositive(_activeElement);
             }
             else if (e.Key == ConsoleKey.Enter)
             {
@@ -169,27 +171,27 @@
             Console.CursorTop = top;
         }
 
-        private static int ChangePositive(int listCount, int counter)
+        private static int ChangePositive(int activeElement)
         {
-            if (counter < listCount - 1)
+            if (activeElement < _elementsCount - 1)
             {
-                return ++counter;
+                return ++activeElement;
             }
             else
             {
-                return counter = 0;
+                return activeElement = 0;
             }
         }
 
-        private static int ChangeNegative(int listCount, int counter)
+        private static int ChangeNegative(int activeElement)
         {
-            if (counter <= 0)
+            if (activeElement <= 0)
             {
-                return counter = listCount - 1;
+                return activeElement = _elementsCount - 1;
             }
             else
             {
-                return --counter;
+                return --activeElement;
             }
         }
     }
