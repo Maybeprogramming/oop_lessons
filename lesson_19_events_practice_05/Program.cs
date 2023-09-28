@@ -10,7 +10,6 @@
             BattleField battleField = new();
 
             battleField.BeginBattle();
-
         }
     }
 
@@ -60,6 +59,8 @@
                 {
                     fighter2.Attack(fighter1);
                 }
+
+                Task.Delay(200).Wait();
             }
 
             CheckVictory(fighter1, fighter2);
