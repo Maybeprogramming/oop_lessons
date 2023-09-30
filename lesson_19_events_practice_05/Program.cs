@@ -33,9 +33,8 @@ namespace lesson_19_events_practice_05
             ListBar.SelectedElement += ChooseFighter;
 
             // ВЕРНИСЬ СЮДА
-            StatsBar statsBar = new StatsBar();
-            statsBar.SetPosition(new Point(60, 0));
-            statsBar.Drow();
+            StatsBar statsBar = new StatsBar(_selectedFighters);
+            statsBar.Drow(new Point(60, 0));
             /// Да сюда!
 
             KeyControl keyboardControl = new KeyControl();
@@ -55,8 +54,7 @@ namespace lesson_19_events_practice_05
             }
 
             //
-            statsBar.SetPosition(new Point(60, 0));
-            statsBar.Drow();
+            statsBar.Drow(new Point(60, 0));
             new Point(0, 4);
             //
 
@@ -214,6 +212,8 @@ namespace lesson_19_events_practice_05
             Health = health;
         }
 
+        public event EventHandler<FighterEventsArgs> FighterChanged;
+
         public string Name { get; private set; }
         public int Damage { get; private set; }
         public int Armor { get; private set; }
@@ -242,6 +242,8 @@ namespace lesson_19_events_practice_05
             }
 
             Console.Write($"{Name} получил {damage} урона. Осталось здоровья: {Health}\n");
+
+            FighterChanged?.Invoke(this, new FighterEventsArgs(this));
         }
 
         public void Attack(Fighter target)
@@ -387,27 +389,43 @@ namespace lesson_19_events_practice_05
     {
         private Fighter? _firstFighter = null;
         private Fighter? _secondFighter = null;
-        private List<Fighter?> _fighters = new List<Fighter?>();
+        private List<Fighter?> _fighters = new List<Fighter?>()
+        {
+            //new Fighter("Первый", 10, 10, 10),
+            //new Fighter("Второй", 10, 10, 20)
+        };
 
         public StatsBar(List<Fighter?> fighters)
         {
             _fighters = fighters;
         }
 
-        public override void Drow()
+        public void Drow(Point position)
         {
-            Display.Print("Stats Bar", Position, ColorText);
+            Display.Print($"Статы бойцов:", new Point(position.X, position.Y), ColorText);
+
+            for (int i = 0; i < _fighters.Count; i++)
+            {
+                if (_fighters[i] != null)
+                {
+                    Display.Print($"{_fighters[i].Name}, {_fighters[i].Health}", new Point(position.X, position.Y + i + 1), ColorText);
+                }
+                else
+                {
+                    Display.Print($"Боец {i + 1} - не выбран!", new Point(position.X, position.Y + i + 1), ColorText);
+                }
+            }
         }
 
-        public void OnChanged(object sender, StatsBarEventsArgs e)
+        public void OnChanged(object sender, FighterEventsArgs e)
         {
 
         }
     }
 
-    class StatsBarEventsArgs : EventArgs
+    class FighterEventsArgs : EventArgs
     {
-        public StatsBarEventsArgs(Fighter? fighter)
+        public FighterEventsArgs(Fighter? fighter)
         {
             Fighter = fighter;
         }
