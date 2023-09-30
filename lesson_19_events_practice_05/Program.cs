@@ -32,10 +32,10 @@ namespace lesson_19_events_practice_05
             ListBar fightersList = new ListBar(_availableFighters);
             ListBar.SelectedElement += ChooseFighter;
 
-            // ВЕРНИСЬ СЮДА
-            StatsBar statsBar = new StatsBar(_selectedFighters);
-            statsBar.Drow(new Point(60, 0));
-            /// Да сюда!
+            //// ВЕРНИСЬ СЮДА
+            //StatsBar statsBar = new StatsBar(_selectedFighters);
+            //StatsBar.Drow(new Point(60, 0));
+            ///// Да сюда!
 
             KeyControl keyboardControl = new KeyControl();
             keyboardControl.Enable();
@@ -53,15 +53,17 @@ namespace lesson_19_events_practice_05
                 Task.Delay(20).Wait();
             }
 
-            //
-            statsBar.Drow(new Point(60, 0));
-            new Point(0, 4);
-            //
+            ////
+            //StatsBar.Drow(new Point(60, 0));
+            //new Point(0, 4);
+            ////
 
             DownloadArena();
 
             Fighter fighter1 = _selectedFighters[0];
             Fighter fighter2 = _selectedFighters[1];
+
+            //OnChangeStatsFighters();
 
             while (fighter1.IsAlive == true && fighter2.IsAlive == true)
             {
@@ -98,6 +100,14 @@ namespace lesson_19_events_practice_05
                         Console.ReadLine();
                     }
                 }
+            }
+        }
+
+        private void OnChangeStatsFighters()
+        {
+            foreach (var fighter in _selectedFighters)
+            {
+                fighter.FighterChanged += StatsBar.OnChanged;
             }
         }
 
@@ -389,7 +399,7 @@ namespace lesson_19_events_practice_05
     {
         private Fighter? _firstFighter = null;
         private Fighter? _secondFighter = null;
-        private List<Fighter?> _fighters = new List<Fighter?>()
+        private static List<Fighter?> _fighters = new List<Fighter?>()
         {
             //new Fighter("Первый", 10, 10, 10),
             //new Fighter("Второй", 10, 10, 20)
@@ -400,26 +410,26 @@ namespace lesson_19_events_practice_05
             _fighters = fighters;
         }
 
-        public void Drow(Point position)
+        public static void Drow(Point position)
         {
-            Display.Print($"Статы бойцов:", new Point(position.X, position.Y), ColorText);
+            Display.Print($"Статы бойцов:", new Point(position.X, position.Y), ConsoleColor.White);
 
             for (int i = 0; i < _fighters.Count; i++)
             {
                 if (_fighters[i] != null)
                 {
-                    Display.Print($"{_fighters[i].Name}, {_fighters[i].Health}", new Point(position.X, position.Y + i + 1), ColorText);
+                    Display.Print($"{_fighters[i].Name}, {_fighters[i].Health}", new Point(position.X, position.Y + i + 1), ConsoleColor.White);
                 }
                 else
                 {
-                    Display.Print($"Боец {i + 1} - не выбран!", new Point(position.X, position.Y + i + 1), ColorText);
+                    Display.Print($"Боец {i + 1} - не выбран!", new Point(position.X, position.Y + i + 1), ConsoleColor.White);
                 }
             }
         }
 
-        public void OnChanged(object sender, FighterEventsArgs e)
+        public static void OnChanged(object sender, FighterEventsArgs e)
         {
-
+            Drow(new Point(60,0));
         }
     }
 
