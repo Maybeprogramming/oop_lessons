@@ -30,6 +30,12 @@
             ListBar controlList = new ListBar(_availableFighters);
             ListBar.SelectedElement += ChooseFighter;
 
+            // ВЕРНИСЬ СЮДА
+            StatsBar statsBar = new StatsBar();
+            statsBar.SetPosition(new Point(40, 0));
+            statsBar.Drow();
+            /// Да сюда!
+
             KeyControl keyboardControl = new KeyControl();
             keyboardControl.Enable();
 
@@ -367,6 +373,14 @@
                 return --activeElement;
             }
         }
+    }
+
+    class StatsBar: UserInterface
+    {
+        private Fighter? _firstFighter = null;
+        private Fighter? _secondFighter = null;
+
+
     }
 
     class KeyControl
