@@ -387,12 +387,11 @@ namespace lesson_19_events_practice_05
     {
         private Fighter? _firstFighter = null;
         private Fighter? _secondFighter = null;
-        private Fighter?[] fighters;
+        private List<Fighter?> _fighters = new List<Fighter?>();
 
-        public StatsBar(Fighter? firstFighter = null, Fighter? secondFighter = null)
+        public StatsBar(List<Fighter?> fighters)
         {
-            _firstFighter = firstFighter;
-            _secondFighter = secondFighter;
+            _fighters = fighters;
         }
 
         public override void Drow()
@@ -415,6 +414,7 @@ namespace lesson_19_events_practice_05
 
         public Fighter? Fighter { get; }
     }
+
     class KeyControl
     {
         public event EventHandler<KeyEventArgs>? UpArrowKeyPressed;
