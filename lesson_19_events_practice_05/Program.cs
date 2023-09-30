@@ -280,27 +280,13 @@
                 if (i == _activeElement)
                 {
                     Console.BackgroundColor = BackColor;
-
-                    Display.Print($"{++number}. {_list[i].Name} | Stats: ", new Point(Position.X, Position.Y + i), TextColor);
-                    Display.Print($"{_list[i].Health}", new Point(), ConsoleColor.Green);
-                    Display.Print($" HP ", new Point(), TextColor);
-                    Display.Print($"{_list[i].Damage}", new Point(), ConsoleColor.Red);
-                    Display.Print($" DMG ", new Point(), TextColor);
-                    Display.Print($"{_list[i].Armor}", new Point(), ConsoleColor.Blue);
-                    Display.Print($" ARMOR\n", new Point(), TextColor);
-
+                    UpdateList(_list[i], ref number, i, ConsoleColor.Red);
                     Console.BackgroundColor = defaultBackgroundColor;
                     Console.ForegroundColor = defaultTextColor;
                 }
                 else
                 {
-                    Display.Print($"{++number}. {_list[i].Name} | Stats: ", new Point(Position.X, Position.Y + i));
-                    Display.Print($"{_list[i].Health}", new Point(), ConsoleColor.Green);
-                    Display.Print($" HP ");
-                    Display.Print($"{_list[i].Damage}", new Point(), ConsoleColor.Red);
-                    Display.Print($" DMG ");
-                    Display.Print($"{_list[i].Armor}", new Point(), ConsoleColor.Blue);
-                    Display.Print($" ARMOR\n");
+                    UpdateList(_list[i], ref number, i);
                 }
             }
         }
@@ -321,6 +307,17 @@
                 Display.Print($"Вы выбрали: {_list[_activeElement].Name}!");
                 SelectedElement?.Invoke(_activeElement);
             }
+        }
+        
+        private void UpdateList(Fighter fighter, ref int number, int currentElement, ConsoleColor textColor = ConsoleColor.White)
+        {
+            Display.Print($"{++number}. {fighter.Name} | Stats: ", new Point(Position.X, Position.Y + currentElement), textColor);
+            Display.Print($"{fighter.Health}", new Point(), ConsoleColor.Green);
+            Display.Print($" HP ", new Point(), textColor);
+            Display.Print($"{fighter.Damage}", new Point(), ConsoleColor.Red);
+            Display.Print($" DMG ", new Point(), textColor);
+            Display.Print($"{fighter.Armor}", new Point(), ConsoleColor.Blue);
+            Display.Print($" ARMOR\n", new Point(), textColor);
         }
 
         private static void ClearOneString()
