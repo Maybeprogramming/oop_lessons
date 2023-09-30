@@ -1,4 +1,6 @@
-﻿namespace lesson_19_events_practice_05
+﻿using System.Dynamic;
+
+namespace lesson_19_events_practice_05
 {
     class Program
     {
@@ -27,12 +29,13 @@
 
         public void BeginBattle()
         {
-            ListBar controlList = new ListBar(_availableFighters);
+            ListBar fightersList = new ListBar(_availableFighters);
             ListBar.SelectedElement += ChooseFighter;
 
             // ВЕРНИСЬ СЮДА
             StatsBar statsBar = new StatsBar();
-            statsBar.SetPosition(new Point(40, 0));
+            Point positionStatsBar = new Point(60, 0);
+            statsBar.SetPosition(positionStatsBar);
             statsBar.Drow();
             /// Да сюда!
 
@@ -42,8 +45,8 @@
             while (isSelectedFighters == false)
             {
                 Display.Print($"Список бойцов для выбора:", new Point(0, 0), ConsoleColor.Green);
-                controlList.SetPosition(new Point(0, 1));
-                controlList.Drow();
+                fightersList.SetPosition(new Point(0, 1));
+                fightersList.Drow();
                 keyboardControl.WaitReadKey();
 
                 if (_selectedFighters.Count == 2) 
@@ -51,6 +54,11 @@
 
                 Task.Delay(20).Wait();
             }
+
+            //
+            statsBar.SetPosition(positionStatsBar);
+            statsBar.Drow();
+            //
 
             DownloadArena();
 
@@ -330,9 +338,9 @@
             }
         }
 
-        private void UpdateString(Fighter fighter, ref int number, int currentElement, ConsoleColor textColor = ConsoleColor.White)
+        private void UpdateString(Fighter fighter, ref int number, int currentPosition, ConsoleColor textColor = ConsoleColor.White)
         {
-            Display.Print($"{++number}. {fighter.Name} | Stats: ", new Point(Position.X, Position.Y + currentElement), textColor);
+            Display.Print($"{++number}. {fighter.Name} | Stats: ", new Point(Position.X, Position.Y + currentPosition), textColor);
             Display.Print($"{fighter.Health}", new Point(), ConsoleColor.Green);
             Display.Print($" HP ", new Point(), textColor);
             Display.Print($"{fighter.Damage}", new Point(), ConsoleColor.Red);
@@ -380,7 +388,18 @@
         private Fighter? _firstFighter = null;
         private Fighter? _secondFighter = null;
 
+        public static event Action? OnChanged;
 
+        public StatsBar(Fighter? firstFighter = null, Fighter? secondFighter = null)
+        {
+            _firstFighter = firstFighter;
+            _secondFighter = secondFighter;
+        }
+
+        public override void Drow()
+        {
+            Display.Print("Stats Bar", Position, ColorText);
+        }
     }
 
     class KeyControl
