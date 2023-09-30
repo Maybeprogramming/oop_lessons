@@ -35,18 +35,18 @@
 
             while (isSelectedFighters == false)
             {
-                Display.Print($"Список бойцов для выбора:", new Point(0, 0));
+                Display.Print($"Список бойцов для выбора:", new Point(0, 0), ConsoleColor.Green);
                 controlList.SetPosition(new Point(0, 1));
                 controlList.Drow();
                 keyboardControl.WaitReadKey();
 
-                if (_selectedFighters.Count == 2) DispayChooseFighters();
+                if (_selectedFighters.Count == 2) 
+                    DispayChooseFighters();
 
                 Task.Delay(20).Wait();
             }
 
             DownloadArena();
-            Console.WriteLine("");
 
             Fighter fighter1 = _selectedFighters[0];
             Fighter fighter2 = _selectedFighters[1];
@@ -79,6 +79,12 @@
                 if (_selectedFighters.Count < 2)
                 {
                     _selectedFighters.Add(_availableFighters[numberFighter]);
+
+                    if (_selectedFighters.Count == 2)
+                    {
+                        Display.Print($"\nВы выбрали двух бойцов, нажмите любую клавишу для продолжения...", new Point(), ConsoleColor.Green);
+                        Console.ReadLine();
+                    }
                 }
             }
         }
@@ -86,23 +92,30 @@
         private void DownloadArena()
         {
             int delayCicle = 10;
-            Console.Write("\nЗагрузка арены ");
+            int delayMiliseconds = 50;
+            char oneSymbol = '|';
+            char twoSymbol = '/';
+            char threeSymbol = '-';
+            char fourSymbol = '\\';
+            ConsoleColor textColor = ConsoleColor.Green;
+
+            Display.Print($"\nПодготовка арены для боя: ", new Point(), textColor);
 
             while (true)
             {
                 if (delayCicle == 0)
                 {
-                    Console.Write('|');
+                    Display.Print($"{oneSymbol}\n", new Point(), textColor);
                     return;
                 }
 
-                Console.Write('|');
-                Task.Delay(50).Wait();
-                Console.Write('/');
-                Task.Delay(50).Wait();
-                Console.Write('-');
-                Task.Delay(50).Wait();
-                Console.Write('\\');
+                Display.Print($"{oneSymbol}", new Point(), textColor);
+                Task.Delay(delayMiliseconds).Wait();
+                Display.Print($"{twoSymbol}", new Point(), textColor);
+                Task.Delay(delayMiliseconds).Wait();
+                Console.Write($"{threeSymbol}", new Point(), textColor);
+                Task.Delay(delayMiliseconds).Wait();
+                Display.Print($"{fourSymbol}", new Point(), textColor);
                 delayCicle--;
             }
         }
@@ -110,7 +123,7 @@
         private void DispayChooseFighters()
         {
             Console.Clear();
-            Display.Print($"Выбранные бойцы:\n");
+            Display.Print($"Выбранные бойцы:\n", new Point(), ConsoleColor.Green);
 
             foreach (var fighter in _selectedFighters)
             {
@@ -119,7 +132,7 @@
 
             isSelectedFighters = true;
             ListBar.SelectedElement -= ChooseFighter;
-            Console.WriteLine("Нажмите любую клавишу чтобы начать схватку...");
+            Display.Print("Нажмите любую клавишу чтобы начать схватку...", new Point(), ConsoleColor.Green);
             Console.ReadLine();
         }
 
@@ -280,13 +293,15 @@
                 if (i == _activeElement)
                 {
                     Console.BackgroundColor = BackColor;
-                    UpdateList(_list[i], ref number, i, ConsoleColor.Red);
+
+                    UpdateString(_list[i], ref number, i, ConsoleColor.Red);
+
                     Console.BackgroundColor = defaultBackgroundColor;
                     Console.ForegroundColor = defaultTextColor;
                 }
                 else
                 {
-                    UpdateList(_list[i], ref number, i);
+                    UpdateString(_list[i], ref number, i);
                 }
             }
         }
@@ -304,12 +319,12 @@
             else if (e.Key == ConsoleKey.Enter)
             {
                 ClearOneString();
-                Display.Print($"Вы выбрали: {_list[_activeElement].Name}!");
+                Display.Print($"\nВы выбрали: {_list[_activeElement].Name}!");
                 SelectedElement?.Invoke(_activeElement);
             }
         }
-        
-        private void UpdateList(Fighter fighter, ref int number, int currentElement, ConsoleColor textColor = ConsoleColor.White)
+
+        private void UpdateString(Fighter fighter, ref int number, int currentElement, ConsoleColor textColor = ConsoleColor.White)
         {
             Display.Print($"{++number}. {fighter.Name} | Stats: ", new Point(Position.X, Position.Y + currentElement), textColor);
             Display.Print($"{fighter.Health}", new Point(), ConsoleColor.Green);
@@ -324,7 +339,7 @@
         {
             int left = Console.CursorLeft;
             int top = Console.CursorTop;
-            Console.WriteLine(new string(' ', 100));
+            Console.WriteLine("\n" + new string(' ', 100));
             Console.CursorLeft = left;
             Console.CursorTop = top;
         }
