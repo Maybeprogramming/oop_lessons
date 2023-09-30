@@ -34,8 +34,7 @@ namespace lesson_19_events_practice_05
 
             // ВЕРНИСЬ СЮДА
             StatsBar statsBar = new StatsBar();
-            Point positionStatsBar = new Point(60, 0);
-            statsBar.SetPosition(positionStatsBar);
+            statsBar.SetPosition(new Point(60, 0));
             statsBar.Drow();
             /// Да сюда!
 
@@ -49,15 +48,16 @@ namespace lesson_19_events_practice_05
                 fightersList.Drow();
                 keyboardControl.WaitReadKey();
 
-                if (_selectedFighters.Count == 2) 
+                if (_selectedFighters.Count == 2)
                     DispayChooseFighters();
 
                 Task.Delay(20).Wait();
             }
 
             //
-            statsBar.SetPosition(positionStatsBar);
+            statsBar.SetPosition(new Point(60, 0));
             statsBar.Drow();
+            new Point(0, 4);
             //
 
             DownloadArena();
@@ -383,12 +383,11 @@ namespace lesson_19_events_practice_05
         }
     }
 
-    class StatsBar: UserInterface
+    class StatsBar : UserInterface
     {
         private Fighter? _firstFighter = null;
         private Fighter? _secondFighter = null;
-
-        public static event Action? OnChanged;
+        private Fighter?[] fighters;
 
         public StatsBar(Fighter? firstFighter = null, Fighter? secondFighter = null)
         {
@@ -400,8 +399,22 @@ namespace lesson_19_events_practice_05
         {
             Display.Print("Stats Bar", Position, ColorText);
         }
+
+        public void OnChanged(object sender, StatsBarEventsArgs e)
+        {
+
+        }
     }
 
+    class StatsBarEventsArgs : EventArgs
+    {
+        public StatsBarEventsArgs(Fighter? fighter)
+        {
+            Fighter = fighter;
+        }
+
+        public Fighter? Fighter { get; }
+    }
     class KeyControl
     {
         public event EventHandler<KeyEventArgs>? UpArrowKeyPressed;
