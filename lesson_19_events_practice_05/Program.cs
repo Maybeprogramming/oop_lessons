@@ -135,7 +135,7 @@ namespace lesson_19_events_practice_05
                 Task.Delay(delayMiliseconds).Wait();
                 Display.Print($"{twoSymbol}", new Point(), textColor);
                 Task.Delay(delayMiliseconds).Wait();
-                Console.Write($"{threeSymbol}", new Point(), textColor);
+                Display.Print($"{threeSymbol}", new Point(), textColor);
                 Task.Delay(delayMiliseconds).Wait();
                 Display.Print($"{fourSymbol}", new Point(), textColor);
                 delayCicle--;
