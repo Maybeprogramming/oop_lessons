@@ -493,7 +493,7 @@
         }
     }
 
-    public class KeyEventArgs : EventArgs
+    class KeyEventArgs : EventArgs
     {
         public KeyEventArgs(ConsoleKey key)
         {
