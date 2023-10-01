@@ -1,6 +1,4 @@
-﻿using System.Dynamic;
-
-namespace lesson_19_events_practice_05
+﻿namespace lesson_19_events_practice_05
 {
     class Program
     {
@@ -12,6 +10,9 @@ namespace lesson_19_events_practice_05
             BattleField battleField = new();
 
             battleField.BeginBattle();
+
+            Console.WriteLine("\n\nПрограмма завершена!!!");
+            Console.ReadLine();
         }
     }
 
@@ -22,7 +23,6 @@ namespace lesson_19_events_practice_05
         private List<Fighter> _selectedFighters;
         private bool isSelectedFighters = false;
 
-
         public BattleField()
         {
             _availableFighters = FillFightersList();
@@ -32,13 +32,11 @@ namespace lesson_19_events_practice_05
         public void BeginBattle()
         {
             ListBar fightersListBar = new ListBar(_availableFighters, new Point(0, 0));
-            fightersListBar.SelectedElement += ChooseFighter;
-
-            // ВЕРНИСЬ СЮДА
+            fightersListBar.SelectedElement += OnChoosedFighter;
             StatsBar statsBar = new StatsBar(_selectedFighters, new Point(60, 0));
             _changedSelectionFighters += statsBar.OnChanged;
+
             statsBar.Drow();
-            /// Да сюда!
 
             KeyControl keyboardControl = new KeyControl();
             keyboardControl.Enable(fightersListBar);
@@ -48,26 +46,16 @@ namespace lesson_19_events_practice_05
                 fightersListBar.Drow();
                 keyboardControl.WaitReadKey();
 
-
                 if (_selectedFighters.Count == 2)
                 {
                     DispayChooseFighters();
-
-                    //Console.Clear();
-                    //isSelectedFighters = true;
-                    //_changedSelectionFighters.Invoke(this, new FighterEventsArgs(null));
-                    //Display.Print("Нажмите любую клавишу чтобы начать схватку...", ConsoleColor.Green);
-                    //Console.ReadLine();
                 }
 
                 Task.Delay(50).Wait();
             }
 
-            //
             statsBar.Drow();
-            //
-
-            fightersListBar.SelectedElement -= ChooseFighter;
+            fightersListBar.SelectedElement -= OnChoosedFighter;
 
             OnChangeStatsFighters(statsBar);
             DownloadArena();
@@ -84,12 +72,9 @@ namespace lesson_19_events_practice_05
             }
 
             CheckVictory(fighter1, fighter2);
-
-            Console.WriteLine("\n\nПрограмма завершена!!!");
-            Console.ReadLine();
         }
 
-        public void ChooseFighter(int numberFighter)
+        public void OnChoosedFighter(int numberFighter)
         {
             if (numberFighter >= 0 && numberFighter < _availableFighters.Count)
             {
@@ -149,8 +134,9 @@ namespace lesson_19_events_practice_05
 
         private void DispayChooseFighters()
         {
-            Console.Clear();
             _changedSelectionFighters.Invoke(this, new FighterEventsArgs(null));
+
+            Console.Clear();
             Display.Print($"Выбранные бойцы:\n", ConsoleColor.Green);
 
             foreach (var fighter in _selectedFighters)
@@ -159,6 +145,7 @@ namespace lesson_19_events_practice_05
             }
 
             isSelectedFighters = true;
+
             Display.Print("Нажмите любую клавишу чтобы начать схватку...", ConsoleColor.Green);
             Console.ReadLine();
         }
@@ -369,8 +356,6 @@ namespace lesson_19_events_practice_05
             }
             else if (e.Key == ConsoleKey.Enter)
             {
-                //ClearOneString();
-                //Display.Print($"\nВы выбрали: {_list[_activeElement].Name}!");
                 SelectedElement?.Invoke(_activeElement);
             }
         }
