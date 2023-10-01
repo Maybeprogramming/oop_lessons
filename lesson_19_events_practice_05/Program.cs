@@ -134,9 +134,8 @@
 
         private void DispayChooseFighters()
         {
-            _changedSelectionFighters.Invoke(this, new FighterEventsArgs(null));
-
             Console.Clear();
+            _changedSelectionFighters.Invoke(this, new FighterEventsArgs(null));
             Display.Print($"Выбранные бойцы:\n", ConsoleColor.Green);
 
             foreach (var fighter in _selectedFighters)
