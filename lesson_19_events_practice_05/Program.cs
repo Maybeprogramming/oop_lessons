@@ -67,15 +67,8 @@ namespace lesson_19_events_practice_05
 
             while (fighter1.IsAlive == true && fighter2.IsAlive == true)
             {
-                if (fighter2.IsAlive == true)
-                {
-                    fighter1.Attack(fighter2);
-                }
-
-                if (fighter1.IsAlive == true)
-                {
-                    fighter2.Attack(fighter1);
-                }
+                fighter1.Attack(fighter2);
+                fighter2.Attack(fighter1);
 
                 Task.Delay(200).Wait();
             }
@@ -103,13 +96,13 @@ namespace lesson_19_events_practice_05
             }
         }
 
-        private void OnChangeStatsFighters()
-        {
-            foreach (var fighter in _selectedFighters)
-            {
-                fighter.FighterChanged += StatsBar.OnChanged;
-            }
-        }
+        //private void OnChangeStatsFighters()
+        //{
+        //    foreach (var fighter in _selectedFighters)
+        //    {
+        //        fighter.FighterChanged += StatsBar.OnChanged;
+        //    }
+        //}
 
         private void DownloadArena()
         {
@@ -429,7 +422,7 @@ namespace lesson_19_events_practice_05
 
         public static void OnChanged(object sender, FighterEventsArgs e)
         {
-            Drow(new Point(60,0));
+            Drow(new Point(60, 0));
         }
     }
 
