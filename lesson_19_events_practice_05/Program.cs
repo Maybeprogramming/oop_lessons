@@ -29,8 +29,8 @@ namespace lesson_19_events_practice_05
 
         public void BeginBattle()
         {
-            ListBar fightersList = new ListBar(_availableFighters, new Point(0, 0));
-            fightersList.SelectedElement += ChooseFighter;
+            ListBar fightersListBar = new ListBar(_availableFighters, new Point(0, 0));
+            fightersListBar.SelectedElement += ChooseFighter;
 
             //// ВЕРНИСЬ СЮДА
             //StatsBar statsBar = new StatsBar(_selectedFighters);
@@ -38,11 +38,11 @@ namespace lesson_19_events_practice_05
             ///// Да сюда!
 
             KeyControl keyboardControl = new KeyControl();
-            keyboardControl.Enable(fightersList);
+            keyboardControl.Enable(fightersListBar);
 
             while (isSelectedFighters == false)
             {                
-                fightersList.Drow();
+                fightersListBar.Drow();
                 keyboardControl.WaitReadKey();
 
                 if (_selectedFighters.Count == 2)
@@ -56,7 +56,7 @@ namespace lesson_19_events_practice_05
             //new Point(0, 4);
             ////
 
-            fightersList.SelectedElement -= ChooseFighter;
+            fightersListBar.SelectedElement -= ChooseFighter;
 
             DownloadArena();
 
@@ -158,11 +158,11 @@ namespace lesson_19_events_practice_05
             }
             else if (fighter1.IsAlive == true && fighter2.IsAlive == false)
             {
-                Display.Print($"{fighter1.Name} - победил в этом сражении");
+                Display.Print($"{fighter1.ShowInfo()} - победил в этом сражении");
             }
             else if (fighter1.IsAlive == false && fighter2.IsAlive == true)
             {
-                Display.Print($"{fighter2.Name} - победил в этом сражении");
+                Display.Print($"{fighter2.ShowInfo()} - победил в этом сражении");
             }
         }
 
