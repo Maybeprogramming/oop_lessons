@@ -425,12 +425,12 @@ namespace lesson_19_events_practice_05
             Point tempPosition = new Point(Console.CursorLeft, Console.CursorTop);
 
             Console.SetCursorPosition(Position.X, Position.Y);
-            Display.Print($"Статы бойцов:", ConsoleColor.Red);
+            Display.Print($"Выбранные бойцы для битвы:", ConsoleColor.Red);
 
             if (_fighters.Count == 0)
             {
                 Console.SetCursorPosition(Position.X, Position.Y + 1);
-                Console.Write(new string(' ', 30));
+                Console.Write(new string(' ', 40));
 
                 Console.SetCursorPosition(Position.X, Position.Y + 1);
                 Display.Print($"Бойцы - не выбраны!", ConsoleColor.White);
@@ -441,7 +441,7 @@ namespace lesson_19_events_practice_05
                 if (_fighters[i] != null)
                 {
                     Console.SetCursorPosition(Position.X, Position.Y + i + 1);
-                    Console.Write(new string(' ', 30));
+                    Console.Write(new string(' ', 40));
 
                     Console.SetCursorPosition(Position.X, Position.Y + i + 1);
                     Display.Print($"{i + 1}). {_fighters[i].Name}, Здоровье [{_fighters[i].Health}]", ConsoleColor.White);
