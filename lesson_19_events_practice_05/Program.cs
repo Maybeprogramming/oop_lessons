@@ -29,8 +29,8 @@ namespace lesson_19_events_practice_05
 
         public void BeginBattle()
         {
-            ListBar fightersList = new ListBar(_availableFighters);
-            ListBar.SelectedElement += ChooseFighter;
+            ListBar fightersList = new ListBar(_availableFighters, new Point(0, 0));
+            fightersList.SelectedElement += ChooseFighter;
 
             //// ВЕРНИСЬ СЮДА
             //StatsBar statsBar = new StatsBar(_selectedFighters);
@@ -38,12 +38,10 @@ namespace lesson_19_events_practice_05
             ///// Да сюда!
 
             KeyControl keyboardControl = new KeyControl();
-            keyboardControl.Enable();
+            keyboardControl.Enable(fightersList);
 
             while (isSelectedFighters == false)
-            {
-                Display.Print($"Список бойцов для выбора:", new Point(0, 0), ConsoleColor.Green);
-                fightersList.SetPosition(new Point(0, 1));
+            {                
                 fightersList.Drow();
                 keyboardControl.WaitReadKey();
 
@@ -57,6 +55,8 @@ namespace lesson_19_events_practice_05
             //StatsBar.Drow(new Point(60, 0));
             //new Point(0, 4);
             ////
+
+            fightersList.SelectedElement -= ChooseFighter;
 
             DownloadArena();
 
@@ -89,8 +89,8 @@ namespace lesson_19_events_practice_05
 
                     if (_selectedFighters.Count == 2)
                     {
-                        Display.Print($"\nВы выбрали двух бойцов, нажмите любую клавишу для продолжения...", new Point(), ConsoleColor.Green);
-                        Console.ReadLine();
+                        Display.Print($"\nВы выбрали двух бойцов, нажмите любую клавишу для продолжения...", ConsoleColor.Green);
+                        Console.ReadKey();
                     }
                 }
             }
@@ -114,23 +114,23 @@ namespace lesson_19_events_practice_05
             char fourSymbol = '\\';
             ConsoleColor textColor = ConsoleColor.Green;
 
-            Display.Print($"\nПодготовка арены для боя: ", new Point(), textColor);
+            Display.Print($"\nПодготовка арены для боя: ", textColor);
 
             while (true)
             {
                 if (delayCicle == 0)
                 {
-                    Display.Print($"{oneSymbol}\n", new Point(), textColor);
+                    Display.Print($"{oneSymbol}\n", textColor);
                     return;
                 }
 
-                Display.Print($"{oneSymbol}", new Point(), textColor);
+                Display.Print($"{oneSymbol}", textColor);
                 Task.Delay(delayMiliseconds).Wait();
-                Display.Print($"{twoSymbol}", new Point(), textColor);
+                Display.Print($"{twoSymbol}", textColor);
                 Task.Delay(delayMiliseconds).Wait();
-                Display.Print($"{threeSymbol}", new Point(), textColor);
+                Display.Print($"{threeSymbol}", textColor);
                 Task.Delay(delayMiliseconds).Wait();
-                Display.Print($"{fourSymbol}", new Point(), textColor);
+                Display.Print($"{fourSymbol}", textColor);
                 delayCicle--;
             }
         }
@@ -138,7 +138,7 @@ namespace lesson_19_events_practice_05
         private void DispayChooseFighters()
         {
             Console.Clear();
-            Display.Print($"Выбранные бойцы:\n", new Point(), ConsoleColor.Green);
+            Display.Print($"Выбранные бойцы:\n", ConsoleColor.Green);
 
             foreach (var fighter in _selectedFighters)
             {
@@ -146,8 +146,7 @@ namespace lesson_19_events_practice_05
             }
 
             isSelectedFighters = true;
-            ListBar.SelectedElement -= ChooseFighter;
-            Display.Print("Нажмите любую клавишу чтобы начать схватку...", new Point(), ConsoleColor.Green);
+            Display.Print("Нажмите любую клавишу чтобы начать схватку...", ConsoleColor.Green);
             Console.ReadLine();
         }
 
@@ -266,6 +265,11 @@ namespace lesson_19_events_practice_05
 
     class UserInterface
     {
+        public UserInterface(Point position)
+        {
+            Position = position;
+        }
+
         public string Text { get; private set; }
         public ConsoleColor ColorText { get; set; } = ConsoleColor.White;
         public Point Position { get; private set; }
@@ -274,23 +278,24 @@ namespace lesson_19_events_practice_05
 
         public virtual void Drow()
         {
-            Display.Print(Text, Position, ColorText);
+            Console.SetCursorPosition(Position.X, Position.Y);
+            Display.Print(Text, ColorText);
         }
 
-        public virtual void SetPosition(Point point)
+        public virtual void SetPosition(Point position)
         {
-            Position = point;
+            Position = position;
         }
     }
 
     class ListBar : UserInterface
     {
-        private static List<Fighter> _list;
-        private static int _activeElement = 0;
-        private static int _elementsCount;
-        public static event Action<int>? SelectedElement;
+        private List<Fighter> _list;
+        private int _activeElement = 0;
+        private int _elementsCount;
+        public event Action<int>? SelectedElement;
 
-        public ListBar(List<Fighter> list)
+        public ListBar(List<Fighter> list, Point position) : base(position)
         {
             _list = list;
             _elementsCount = _list.Count;
@@ -307,11 +312,15 @@ namespace lesson_19_events_practice_05
             ConsoleColor defaultTextColor = Console.ForegroundColor;
             int number = 0;
 
+            Console.SetCursorPosition(Position.X, Position.Y);
+            Display.Print($"Список бойцов для выбора:", ConsoleColor.Green);
+
             for (int i = 0; i < _elementsCount; i++)
             {
                 if (i == _activeElement)
                 {
                     Console.BackgroundColor = BackColor;
+                    Console.SetCursorPosition(Position.X, Position.Y + i + 1);
 
                     UpdateString(_list[i], ref number, i, ConsoleColor.Red);
 
@@ -320,12 +329,13 @@ namespace lesson_19_events_practice_05
                 }
                 else
                 {
+                    Console.SetCursorPosition(Position.X, Position.Y + i + 1);
                     UpdateString(_list[i], ref number, i);
                 }
             }
         }
 
-        public static void OnChangeActiveElement(object? sender, KeyEventArgs e)
+        public void OnChangeActiveElement(object? sender, KeyEventArgs e)
         {
             if (e.Key == ConsoleKey.UpArrow)
             {
@@ -345,16 +355,16 @@ namespace lesson_19_events_practice_05
 
         private void UpdateString(Fighter fighter, ref int number, int currentPosition, ConsoleColor textColor = ConsoleColor.White)
         {
-            Display.Print($"{++number}. {fighter.Name} | Stats: ", new Point(Position.X, Position.Y + currentPosition), textColor);
-            Display.Print($"{fighter.Health}", new Point(), ConsoleColor.Green);
-            Display.Print($" HP ", new Point(), textColor);
-            Display.Print($"{fighter.Damage}", new Point(), ConsoleColor.Red);
-            Display.Print($" DMG ", new Point(), textColor);
-            Display.Print($"{fighter.Armor}", new Point(), ConsoleColor.Blue);
-            Display.Print($" ARMOR\n", new Point(), textColor);
+            Display.Print($"{++number}. {fighter.Name} | Stats: ", textColor);
+            Display.Print($"{fighter.Health}", ConsoleColor.Green);
+            Display.Print($" HP ", textColor);
+            Display.Print($"{fighter.Damage}", ConsoleColor.Red);
+            Display.Print($" DMG ", textColor);
+            Display.Print($"{fighter.Armor}", ConsoleColor.Blue);
+            Display.Print($" ARMOR\n", textColor);
         }
 
-        private static void ClearOneString()
+        private void ClearOneString()
         {
             int left = Console.CursorLeft;
             int top = Console.CursorTop;
@@ -363,7 +373,7 @@ namespace lesson_19_events_practice_05
             Console.CursorTop = top;
         }
 
-        private static int ChangePositive(int activeElement)
+        private int ChangePositive(int activeElement)
         {
             if (activeElement < _elementsCount - 1)
             {
@@ -375,7 +385,7 @@ namespace lesson_19_events_practice_05
             }
         }
 
-        private static int ChangeNegative(int activeElement)
+        private int ChangeNegative(int activeElement)
         {
             if (activeElement <= 0)
             {
@@ -392,37 +402,43 @@ namespace lesson_19_events_practice_05
     {
         private Fighter? _firstFighter = null;
         private Fighter? _secondFighter = null;
-        private static List<Fighter?> _fighters = new List<Fighter?>()
+        private List<Fighter?> _fighters = new List<Fighter?>()
         {
             //new Fighter("Первый", 10, 10, 10),
             //new Fighter("Второй", 10, 10, 20)
         };
 
-        public StatsBar(List<Fighter?> fighters)
+        private Point _position;
+
+        public StatsBar(List<Fighter?> fighters, Point position) : base(position)
         {
             _fighters = fighters;
+            _position = position;
         }
 
-        public static void Drow(Point position)
+        public override void Drow()
         {
-            Display.Print($"Статы бойцов:", new Point(position.X, position.Y), ConsoleColor.White);
+            Console.SetCursorPosition(Position.X, Position.Y);
+            Display.Print($"Статы бойцов:", ConsoleColor.White);
 
             for (int i = 0; i < _fighters.Count; i++)
             {
                 if (_fighters[i] != null)
                 {
-                    Display.Print($"{_fighters[i].Name}, {_fighters[i].Health}", new Point(position.X, position.Y + i + 1), ConsoleColor.White);
+                    Console.SetCursorPosition(Position.X, Position.Y + i + 1);
+                    Display.Print($"{_fighters[i].Name}, {_fighters[i].Health}", ConsoleColor.White);
                 }
                 else
                 {
-                    Display.Print($"Боец {i + 1} - не выбран!", new Point(position.X, position.Y + i + 1), ConsoleColor.White);
+                    Console.SetCursorPosition(Position.X, Position.Y + i + 1);
+                    Display.Print($"Боец {i + 1} - не выбран!", ConsoleColor.White);
                 }
             }
         }
 
-        public static void OnChanged(object sender, FighterEventsArgs e)
+        public void OnChanged(object sender, FighterEventsArgs e)
         {
-            Drow(new Point(60, 0));
+            Drow();
         }
     }
 
@@ -463,18 +479,18 @@ namespace lesson_19_events_practice_05
             }
         }
 
-        public void Enable()
+        public void Enable(ListBar listBar)
         {
-            UpArrowKeyPressed += ListBar.OnChangeActiveElement;
-            DownArrowKeyPressed += ListBar.OnChangeActiveElement;
-            EnterKeyPressed += ListBar.OnChangeActiveElement;
+            UpArrowKeyPressed += listBar.OnChangeActiveElement;
+            DownArrowKeyPressed += listBar.OnChangeActiveElement;
+            EnterKeyPressed += listBar.OnChangeActiveElement;
         }
 
-        public void Disable()
+        public void Disable(ListBar listBar)
         {
-            UpArrowKeyPressed -= ListBar.OnChangeActiveElement;
-            DownArrowKeyPressed -= ListBar.OnChangeActiveElement;
-            EnterKeyPressed -= ListBar.OnChangeActiveElement;
+            UpArrowKeyPressed -= listBar.OnChangeActiveElement;
+            DownArrowKeyPressed -= listBar.OnChangeActiveElement;
+            EnterKeyPressed -= listBar.OnChangeActiveElement;
         }
     }
 
@@ -493,10 +509,8 @@ namespace lesson_19_events_practice_05
         public int X { get; }
         public int Y { get; }
 
-        public Point(int x, int y)
+        public Point(int x = 0, int y = 0)
         {
-            Console.CursorLeft = x;
-            Console.CursorTop = y;
             X = x;
             Y = y;
         }
@@ -504,7 +518,7 @@ namespace lesson_19_events_practice_05
 
     static class Display
     {
-        public static void Print(string text, Point point = new Point(), ConsoleColor consoleColor = ConsoleColor.White)
+        public static void Print(string text, ConsoleColor consoleColor = ConsoleColor.White)
         {
             ConsoleColor defaultColor = Console.ForegroundColor;
             Console.ForegroundColor = consoleColor;
