@@ -17,9 +17,11 @@ namespace lesson_19_events_practice_05
 
     class BattleField
     {
+        private event EventHandler<FighterEventsArgs> _changedSelectionFighters;
         private List<Fighter> _availableFighters;
         private List<Fighter> _selectedFighters;
         private bool isSelectedFighters = false;
+
 
         public BattleField()
         {
@@ -32,38 +34,46 @@ namespace lesson_19_events_practice_05
             ListBar fightersListBar = new ListBar(_availableFighters, new Point(0, 0));
             fightersListBar.SelectedElement += ChooseFighter;
 
-            //// ВЕРНИСЬ СЮДА
-            //StatsBar statsBar = new StatsBar(_selectedFighters);
-            //StatsBar.Drow(new Point(60, 0));
-            ///// Да сюда!
+            // ВЕРНИСЬ СЮДА
+            StatsBar statsBar = new StatsBar(_selectedFighters, new Point(60, 0));
+            _changedSelectionFighters += statsBar.OnChanged;
+            statsBar.Drow();
+            /// Да сюда!
 
             KeyControl keyboardControl = new KeyControl();
             keyboardControl.Enable(fightersListBar);
 
             while (isSelectedFighters == false)
-            {                
+            {
                 fightersListBar.Drow();
                 keyboardControl.WaitReadKey();
 
+
                 if (_selectedFighters.Count == 2)
+                {
                     DispayChooseFighters();
 
-                Task.Delay(20).Wait();
+                    //Console.Clear();
+                    //isSelectedFighters = true;
+                    //_changedSelectionFighters.Invoke(this, new FighterEventsArgs(null));
+                    //Display.Print("Нажмите любую клавишу чтобы начать схватку...", ConsoleColor.Green);
+                    //Console.ReadLine();
+                }
+
+                Task.Delay(50).Wait();
             }
 
-            ////
-            //StatsBar.Drow(new Point(60, 0));
-            //new Point(0, 4);
-            ////
+            //
+            statsBar.Drow();
+            //
 
             fightersListBar.SelectedElement -= ChooseFighter;
 
+            OnChangeStatsFighters(statsBar);
             DownloadArena();
 
             Fighter fighter1 = _selectedFighters[0];
             Fighter fighter2 = _selectedFighters[1];
-
-            //OnChangeStatsFighters();
 
             while (fighter1.IsAlive == true && fighter2.IsAlive == true)
             {
@@ -86,9 +96,11 @@ namespace lesson_19_events_practice_05
                 if (_selectedFighters.Count < 2)
                 {
                     _selectedFighters.Add(_availableFighters[numberFighter]);
+                    _changedSelectionFighters?.Invoke(this, new FighterEventsArgs(_availableFighters[numberFighter]));
 
                     if (_selectedFighters.Count == 2)
                     {
+                        Console.SetCursorPosition(0, 22);
                         Display.Print($"\nВы выбрали двух бойцов, нажмите любую клавишу для продолжения...", ConsoleColor.Green);
                         Console.ReadKey();
                     }
@@ -96,13 +108,13 @@ namespace lesson_19_events_practice_05
             }
         }
 
-        //private void OnChangeStatsFighters()
-        //{
-        //    foreach (var fighter in _selectedFighters)
-        //    {
-        //        fighter.FighterChanged += StatsBar.OnChanged;
-        //    }
-        //}
+        private void OnChangeStatsFighters(StatsBar statsBar)
+        {
+            foreach (var fighter in _selectedFighters)
+            {
+                fighter.FighterChanged += statsBar.OnChanged;
+            }
+        }
 
         private void DownloadArena()
         {
@@ -138,6 +150,7 @@ namespace lesson_19_events_practice_05
         private void DispayChooseFighters()
         {
             Console.Clear();
+            _changedSelectionFighters.Invoke(this, new FighterEventsArgs(null));
             Display.Print($"Выбранные бойцы:\n", ConsoleColor.Green);
 
             foreach (var fighter in _selectedFighters)
@@ -158,11 +171,11 @@ namespace lesson_19_events_practice_05
             }
             else if (fighter1.IsAlive == true && fighter2.IsAlive == false)
             {
-                Display.Print($"{fighter1.ShowInfo()} - победил в этом сражении");
+                Display.Print($"Победил в этом сражении - {fighter1.ShowInfo()}");
             }
             else if (fighter1.IsAlive == false && fighter2.IsAlive == true)
             {
-                Display.Print($"{fighter2.ShowInfo()} - победил в этом сражении");
+                Display.Print($"Победил в этом сражении - {fighter2.ShowInfo()}");
             }
         }
 
@@ -286,6 +299,15 @@ namespace lesson_19_events_practice_05
         {
             Position = position;
         }
+
+        protected virtual void ClearOneString()
+        {
+            int left = Console.CursorLeft;
+            int top = Console.CursorTop;
+            Console.WriteLine("\n" + new string(' ', 100));
+            Console.CursorLeft = left;
+            Console.CursorTop = top;
+        }
     }
 
     class ListBar : UserInterface
@@ -347,8 +369,8 @@ namespace lesson_19_events_practice_05
             }
             else if (e.Key == ConsoleKey.Enter)
             {
-                ClearOneString();
-                Display.Print($"\nВы выбрали: {_list[_activeElement].Name}!");
+                //ClearOneString();
+                //Display.Print($"\nВы выбрали: {_list[_activeElement].Name}!");
                 SelectedElement?.Invoke(_activeElement);
             }
         }
@@ -362,15 +384,6 @@ namespace lesson_19_events_practice_05
             Display.Print($" DMG ", textColor);
             Display.Print($"{fighter.Armor}", ConsoleColor.Blue);
             Display.Print($" ARMOR\n", textColor);
-        }
-
-        private void ClearOneString()
-        {
-            int left = Console.CursorLeft;
-            int top = Console.CursorTop;
-            Console.WriteLine("\n" + new string(' ', 100));
-            Console.CursorLeft = left;
-            Console.CursorTop = top;
         }
 
         private int ChangePositive(int activeElement)
@@ -400,40 +413,42 @@ namespace lesson_19_events_practice_05
 
     class StatsBar : UserInterface
     {
-        private Fighter? _firstFighter = null;
-        private Fighter? _secondFighter = null;
-        private List<Fighter?> _fighters = new List<Fighter?>()
-        {
-            //new Fighter("Первый", 10, 10, 10),
-            //new Fighter("Второй", 10, 10, 20)
-        };
-
-        private Point _position;
+        private List<Fighter?> _fighters;
 
         public StatsBar(List<Fighter?> fighters, Point position) : base(position)
         {
             _fighters = fighters;
-            _position = position;
         }
 
         public override void Drow()
         {
+            Point tempPosition = new Point(Console.CursorLeft, Console.CursorTop);
+
             Console.SetCursorPosition(Position.X, Position.Y);
-            Display.Print($"Статы бойцов:", ConsoleColor.White);
+            Display.Print($"Статы бойцов:", ConsoleColor.Red);
+
+            if (_fighters.Count == 0)
+            {
+                Console.SetCursorPosition(Position.X, Position.Y + 1);
+                Console.Write(new string(' ', 30));
+
+                Console.SetCursorPosition(Position.X, Position.Y + 1);
+                Display.Print($"Бойцы - не выбраны!", ConsoleColor.White);
+            }
 
             for (int i = 0; i < _fighters.Count; i++)
             {
                 if (_fighters[i] != null)
                 {
                     Console.SetCursorPosition(Position.X, Position.Y + i + 1);
-                    Display.Print($"{_fighters[i].Name}, {_fighters[i].Health}", ConsoleColor.White);
-                }
-                else
-                {
+                    Console.Write(new string(' ', 30));
+
                     Console.SetCursorPosition(Position.X, Position.Y + i + 1);
-                    Display.Print($"Боец {i + 1} - не выбран!", ConsoleColor.White);
+                    Display.Print($"{i + 1}). {_fighters[i].Name}, Здоровье [{_fighters[i].Health}]", ConsoleColor.White);
                 }
             }
+
+            Console.SetCursorPosition(tempPosition.X, tempPosition.Y);
         }
 
         public void OnChanged(object sender, FighterEventsArgs e)
