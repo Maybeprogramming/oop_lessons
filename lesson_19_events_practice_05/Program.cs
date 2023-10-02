@@ -146,7 +146,7 @@
             isSelectedFighters = true;
 
             Display.Print("Нажмите любую клавишу чтобы начать схватку...", ConsoleColor.Green);
-            Console.ReadLine();
+            Console.ReadKey();
         }
 
         public void CheckVictory(Fighter fighter1, Fighter fighter2)
