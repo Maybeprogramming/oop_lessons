@@ -8,9 +8,14 @@
         }
     }
 
-    class Fighter : IDamageable, IDamageProvider
+    class Fighter : IDamageable, IDamageProvider, IHealable
     {
         public void Attack(Fighter target)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Healing(int healingPoint)
         {
             throw new NotImplementedException();
         }
