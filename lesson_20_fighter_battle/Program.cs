@@ -8,19 +8,36 @@
         }
     }
 
-    class Warrior: IDamageable
+    class Fighter : IDamageable, IDamageProvider
     {
+        public void Attack(Fighter target)
+        {
+            throw new NotImplementedException();
+        }
 
+        public void TakeDamage(int damage)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     class Ability
     {
         private string _name;
-
     }
 
     interface IDamageable
     {
-       public void TakeDamage(int damage) { }
+        void TakeDamage(int damage);
+    }
+
+    interface IDamageProvider
+    {
+        void Attack(Fighter target);
+    }
+
+    interface IHealable
+    {
+        void Healing(int healingPoint);
     }
 }
