@@ -1,4 +1,6 @@
-﻿namespace lesson_20_fighter_battle
+﻿using System.Xml.Linq;
+
+namespace lesson_20_fighter_battle
 {
     internal class Program
     {
@@ -63,12 +65,12 @@
 
             Console.WriteLine("Готовые к бою отважные герои:");
 
-            foreach (var fighter in _fighters)
+            for (int i = 0; i < _fighters.Count; i++)
             {
-                Console.WriteLine(fighter);
+                Console.WriteLine($"{i+1}. {_fighters[i].GetType().Name} ({_fighters[i].Name})");
             }
 
-            Console.WriteLine("Начать битву?\nДля продолжения нажмите любую клавишу...");
+            Console.WriteLine("Начать битву?\nДля продолжения нажмите любую клавишу...\n\n");
             Console.ReadKey();
 
             while (_fighters[0].IsAlive == true && _fighters[1].IsAlive == true)
@@ -85,7 +87,7 @@
             {
                 Console.WriteLine($"Победитель - {_fighters[0]} ({_fighters[0].Name})!");
             }
-            else if(_fighters[0].IsAlive == false && _fighters[1].IsAlive == true)
+            else if (_fighters[0].IsAlive == false && _fighters[1].IsAlive == true)
             {
                 Console.WriteLine($"Победитель - {_fighters[1]} ({_fighters[1].Name})!");
             }
@@ -139,7 +141,7 @@
             if (Health > 0)
             {
                 Health -= damage;
-                Console.WriteLine($"{GetType().Name} ({Name}) получил удар ({damage}) ед., осталось здоровья ({Health})");
+                //Console.WriteLine($"{GetType().Name} ({Name}) получил удар ({damage}) ед., осталось здоровья ({Health})");
                 return true;
             }
 
