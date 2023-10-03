@@ -79,9 +79,8 @@ namespace lesson_20_fighter_battle
             while (_fighters[0].IsAlive == true && _fighters[1].IsAlive == true)
             {
                 _fighters[0].Attack(_fighters[1]);
-                Console.WriteLine(new string ('-', 80));
                 _fighters[1].Attack(_fighters[0]);
-                Console.WriteLine(new string ('#', 80));
+                Console.WriteLine(new string ('-', 80));
             }
 
             if (_fighters[0].IsAlive == false && _fighters[1].IsAlive == false)
@@ -113,9 +112,9 @@ namespace lesson_20_fighter_battle
         private int _health;
         public Fighter()
         {
-            _health = Generator.GetInt(100, 200);
-            Damage = Generator.GetInt(20, 50);
-            Name = Generator.GetName();
+            Health = Generator.NextInt(100, 200);
+            Damage = Generator.NextInt(20, 50);
+            Name = Generator.NextName();
         }
 
         public int Health { get => _health; private set => SetHealth(value); }
@@ -275,11 +274,11 @@ namespace lesson_20_fighter_battle
                 "Подгузник",
                 "Тряпка"
             };
-        public static string GetName()
+        public static string NextName()
         {
             return _names[_random.Next(0, _names.Length - 1)];
         }
-        public static int GetInt(int minValue, int maxValue)
+        public static int NextInt(int minValue, int maxValue)
         {
             return _random.Next(minValue, maxValue + 1);
         }
