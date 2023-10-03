@@ -2,14 +2,36 @@
 {
     internal class Program
     {
+        List<Fighter> fighters = new List<Fighter>();
+
         static void Main()
         {
 
+            switch (Console.ReadLine())
+            {
+                case "0":
+                    CreateFighter(Fighter.Create());
+                    break;
+
+                case "1":
+                    break;
+
+                case "2":
+                    break;
+            }
         }
+
+        private void CreateFighter(Func<Fighter> Create) => fighters.Add(Create.Invoke());
+
     }
 
     class Fighter : IDamageable, IDamageProvider, IHealable
     {
+        internal static Func<Fighter> Create()
+        {
+            throw new NotImplementedException();
+        }
+
         public void Attack(Fighter target)
         {
             throw new NotImplementedException();
@@ -28,7 +50,7 @@
 
     class Ability
     {
-        private string _name;
+        private string? _name;
     }
 
     interface IDamageable
