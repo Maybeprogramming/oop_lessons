@@ -1,4 +1,5 @@
 ﻿using System.Xml.Linq;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace lesson_20_fighter_battle
 {
@@ -6,6 +7,8 @@ namespace lesson_20_fighter_battle
     {
         static void Main()
         {
+            Console.WindowWidth = 100;
+
             BattleField battleField = new BattleField();
             battleField.StartBattle();
 
@@ -27,7 +30,7 @@ namespace lesson_20_fighter_battle
                 Console.Clear();
 
                 Console.WriteLine(
-                    $"Доступные бойцы:\n" +
+                    $"Доступные классы героев:\n" +
                     $"0 - Figter\n" +
                     $"1 - Warrior\n" +
                     $"2 - Assasign\n" +
@@ -67,7 +70,7 @@ namespace lesson_20_fighter_battle
 
             for (int i = 0; i < _fighters.Count; i++)
             {
-                Console.WriteLine($"{i+1}. {_fighters[i].GetType().Name} ({_fighters[i].Name})");
+                Console.WriteLine($"{i + 1}. {_fighters[i].GetType().Name} ({_fighters[i].Name}): DMG: {_fighters[i].Damage}, HP: {_fighters[i].Health}");
             }
 
             Console.WriteLine("Начать битву?\nДля продолжения нажмите любую клавишу...\n\n");
@@ -76,20 +79,22 @@ namespace lesson_20_fighter_battle
             while (_fighters[0].IsAlive == true && _fighters[1].IsAlive == true)
             {
                 _fighters[0].Attack(_fighters[1]);
+                Console.WriteLine(new string ('-', 80));
                 _fighters[1].Attack(_fighters[0]);
+                Console.WriteLine(new string ('#', 80));
             }
 
             if (_fighters[0].IsAlive == false && _fighters[1].IsAlive == false)
             {
-                Console.WriteLine("Ничья! Оба героя пали на поле боя!");
+                Console.WriteLine("\nНичья! Оба героя пали на поле боя!");
             }
             else if (_fighters[0].IsAlive == true && _fighters[1].IsAlive == false)
             {
-                Console.WriteLine($"Победитель - {_fighters[0]} ({_fighters[0].Name})!");
+                Console.WriteLine($"\nПобедитель - {_fighters[0]} ({_fighters[0].Name})!");
             }
             else if (_fighters[0].IsAlive == false && _fighters[1].IsAlive == true)
             {
-                Console.WriteLine($"Победитель - {_fighters[1]} ({_fighters[1].Name})!");
+                Console.WriteLine($"\nПобедитель - {_fighters[1]} ({_fighters[1].Name})!");
             }
 
             Console.ReadKey();
@@ -105,43 +110,44 @@ namespace lesson_20_fighter_battle
 
     class Fighter : IDamageable, IDamageProvider, IHealable
     {
+        private int _health;
         public Fighter()
         {
-            Health = Generator.GetInt(100, 200);
+            _health = Generator.GetInt(100, 200);
             Damage = Generator.GetInt(20, 50);
             Name = Generator.GetName();
         }
 
-        public int Health { get; private set; }
+        public int Health { get => _health; private set => SetHealth(value); }
         public int Damage { get; private set; }
         public bool IsAlive => Health > 0;
         public string Name { get; private set; }
 
-        public void Attack(Fighter target)
+        public virtual void Attack(Fighter target)
         {
-            if (target.TryTakeDamage(Damage))
-            {
-                Console.WriteLine($"{GetType().Name} ({Name}) ударил {target.GetType().Name} ({target.Name})");
-            }
+            if (IsAlive == false) return;
             else
             {
-                Console.WriteLine($"{GetType().Name} ({Name}) не смог ударить {target.GetType().Name} ({target.Name})");
+                Console.WriteLine($"{GetType().Name} ({Name}) произвёл удар в сторону {target.GetType().Name} ({target.Name})");
+                
+                if (target.IsAlive == true)
+                    target.TryTakeDamage(Damage);
             }
         }
 
-        public void Healing(int healingPoint)
+        public virtual void Healing(int healingPoint)
         {
             Health += healingPoint;
-            Console.WriteLine($"{GetType().Name} ({Name}) подлечил здоровье на ({healingPoint}) ед.");
+            Console.WriteLine($"{GetType().Name} ({Name}) подлечил здоровье на ({healingPoint}) ед. Здоровье : ({Health})");
 
         }
 
-        public bool TryTakeDamage(int damage)
+        public virtual bool TryTakeDamage(int damage)
         {
             if (Health > 0)
             {
                 Health -= damage;
-                //Console.WriteLine($"{GetType().Name} ({Name}) получил удар ({damage}) ед., осталось здоровья ({Health})");
+                Console.WriteLine($"{GetType().Name} ({Name}) получил удар ({damage}) ед., осталось здоровья ({Health})");
                 return true;
             }
 
@@ -152,6 +158,18 @@ namespace lesson_20_fighter_battle
         {
             return $"{GetType().Name}";
         }
+
+        private void SetHealth(int value)
+        {
+            if (value > 0)
+            {
+                _health = value;
+            }
+            else
+            {
+                _health = 0;
+            }
+        }
     }
 
     class Warrior : Fighter
@@ -161,7 +179,18 @@ namespace lesson_20_fighter_battle
 
     class Assasign : Fighter
     {
+        public override void Attack(Fighter target)
+        {
+            if (IsAlive == false || target.IsAlive == false) return;
 
+            Console.WriteLine($"{GetType().Name} ({Name}) произвёл удар в сторону {target.GetType().Name} ({target.Name})");
+
+            if (target.TryTakeDamage(Damage))
+            {
+                int healingPoint = Damage / 10;
+                Healing(healingPoint);
+            }
+        }
     }
 
     class Hunter : Fighter
