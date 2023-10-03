@@ -276,11 +276,6 @@ namespace lesson_20_fighter_battle
         }
     }
 
-    class Ability
-    {
-        private string? _name;
-    }
-
     interface IDamageable
     {
         bool TryTakeDamage(int damage);
