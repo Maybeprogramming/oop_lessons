@@ -2,34 +2,59 @@
 {
     internal class Program
     {
-        List<Fighter> fighters = new List<Fighter>();
-
         static void Main()
         {
 
-            switch (Console.ReadLine())
+            
+        }
+    }
+
+    class BatteDield
+    {
+        List<Fighter> fighters = new List<Fighter>();
+
+        public void StartBattle()
+        {
+            while (fighters.Count < 3)
             {
-                case "0":
-                    CreateFighter(Fighter.Create());
-                    break;
+                switch (Console.ReadLine())
+                {
+                    case "0":
+                        ChooseFighter(Fighter.Create());
+                        break;
 
-                case "1":
-                    break;
+                    case "1":
+                        ChooseFighter(Warrior.Create());
+                        break;
 
-                case "2":
-                    break;
+                    case "2":
+                        ChooseFighter(Assasign.Create());
+                        break;
+                    default:
+                        Console.WriteLine("Нет такой команды!");
+                        break;
+                }
             }
+
+            foreach(var fighter in fighters)
+            {
+                Console.WriteLine(fighter);
+            }
+
+            Console.ReadKey();
+
         }
 
-        private void CreateFighter(Func<Fighter> Create) => fighters.Add(Create.Invoke());
-
+        void ChooseFighter(Func<Fighter> Create) => fighters.Add(Create.Invoke());
+        void ChooseFighter(Func<Warrior> Create) => fighters.Add(Create.Invoke());
+        void ChooseFighter(Func<Assasign> Create) => fighters.Add(Create.Invoke());
     }
 
     class Fighter : IDamageable, IDamageProvider, IHealable
     {
         internal static Func<Fighter> Create()
         {
-            throw new NotImplementedException();
+            return () => new Fighter();
         }
 
         public void Attack(Fighter target)
@@ -46,6 +71,21 @@
         {
             throw new NotImplementedException();
         }
+
+        public override string ToString()
+        {
+            return $"{this.GetType().Name}";
+        }
+    }
+
+    class Warrior : Fighter
+    {
+
+    }
+
+    class Assasign: Fighter
+    {
+
     }
 
     class Ability
