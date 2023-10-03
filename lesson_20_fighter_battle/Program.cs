@@ -5,10 +5,34 @@
         static void Main()
         {
             Console.WindowWidth = 100;
-
             BattleField battleField = new BattleField();
-            battleField.BeginBattle();
+            bool isRun = true;
 
+            while (isRun == true)
+            {
+                Console.Clear();
+                Console.WriteLine(
+                    $"Меню:\n" +
+                    $"1 - Начать подготовку битвы\n" +
+                    $"2 - Покинуть поле битвы.");
+
+                switch (Console.ReadLine())
+                {
+                    case "1":
+                        battleField.BeginBattle();
+                        break;
+
+                    case "2":
+                        isRun = false;
+                        break;
+
+                    default:
+                        Console.WriteLine("Такой команды нет!!!");
+                        break;
+                }
+            }
+
+            Console.WriteLine("Работа программы завершена!");
             Console.ReadKey();
         }
     }
@@ -274,7 +298,7 @@
             else
             {
                 _mana += _regenerationManaCount;
-                Console.WriteLine($"{GetType().Name} ({ Name}) не хватает маны для удара {target.GetType().Name} ({target.Name})");
+                Console.WriteLine($"{GetType().Name} ({Name}) не хватает маны для удара {target.GetType().Name} ({target.Name})");
             }
         }
 
