@@ -80,7 +80,7 @@ namespace lesson_20_fighter_battle
             {
                 _fighters[0].Attack(_fighters[1]);
                 _fighters[1].Attack(_fighters[0]);
-                Console.WriteLine(new string ('-', 80));
+                Console.WriteLine(new string('-', 80));
             }
 
             if (_fighters[0].IsAlive == false && _fighters[1].IsAlive == false)
@@ -109,18 +109,18 @@ namespace lesson_20_fighter_battle
 
     class Fighter : IDamageable, IDamageProvider, IHealable
     {
-        private int _health;
+        protected int _health;
         public Fighter()
         {
-            Health = Generator.NextInt(100, 200);
-            Damage = Generator.NextInt(20, 50);
+            Health = Generator.NextInt(100, 201);
+            Damage = Generator.NextInt(20, 51);
             Name = Generator.NextName();
         }
 
-        public int Health { get => _health; private set => SetHealth(value); }
-        public int Damage { get; private set; }
+        public int Health { get => _health; protected set => SetHealth(value); }
+        public int Damage { get; protected set; }
         public bool IsAlive => Health > 0;
-        public string Name { get; private set; }
+        public string Name { get; protected set; }
 
         public virtual void Attack(Fighter target)
         {
@@ -128,7 +128,7 @@ namespace lesson_20_fighter_battle
             else
             {
                 Console.WriteLine($"{GetType().Name} ({Name}) произвёл удар в сторону {target.GetType().Name} ({target.Name})");
-                
+
                 if (target.IsAlive == true)
                     target.TryTakeDamage(Damage);
             }
@@ -172,7 +172,21 @@ namespace lesson_20_fighter_battle
 
     class Warrior : Fighter
     {
+        private int _missDamagePercent = 30;
+        private int _maxPercent = 100;
 
+        public override bool TryTakeDamage(int damage)
+        {
+            int missChance = Generator.NextInt(0, _maxPercent + 1);
+
+            if (missChance < _missDamagePercent)
+            {
+                Console.WriteLine($"{GetType().Name} ({Name}) увернулся от удара, осталось здоровья ({Health})");
+                return false;
+            }
+
+            return base.TryTakeDamage(damage);
+        }
     }
 
     class Assasign : Fighter
@@ -193,12 +207,65 @@ namespace lesson_20_fighter_battle
 
     class Hunter : Fighter
     {
+        private int _critPercent = 30;
+        private int _maxPercent = 100;
+        private int _damageModifyPercent = 150;
 
+        public override void Attack(Fighter target)
+        {
+            if (IsAlive == false) return;
+            else
+            {
+                int currentDamage = CalculateCriteDamage();
+                Console.WriteLine($"{GetType().Name} ({Name}) произвёл удар в сторону {target.GetType().Name} ({target.Name})");
+
+                if (target.IsAlive == true)
+                    target.TryTakeDamage(currentDamage);
+            }
+        }
+
+        private int CalculateCriteDamage()
+        {
+            int critChance = Generator.NextInt(0, _maxPercent + 1);
+
+            Console.WriteLine($"{critChance} шанс");
+
+            if (critChance < _critPercent)
+            {
+                return Damage * _damageModifyPercent / _maxPercent;
+            }
+
+            return Damage;
+        }
     }
 
     class Wizzard : Fighter
     {
+        private int _mana;
+        private int _manMana = 100;
+        private int _maxMana = 200;
 
+        public Wizzard()
+        {
+            _mana = Generator.NextInt(_manMana, _maxMana);
+        }
+
+        public int Mana { get => _mana; }
+
+        public override void Attack(Fighter target)
+        {
+            base.Attack(target);
+        }
+
+        public override bool TryTakeDamage(int damage)
+        {
+            return base.TryTakeDamage(damage);
+        }
+
+        public override void Healing(int healingPoint)
+        {
+            base.Healing(healingPoint);
+        }
     }
 
     class Ability
@@ -280,7 +347,7 @@ namespace lesson_20_fighter_battle
         }
         public static int NextInt(int minValue, int maxValue)
         {
-            return _random.Next(minValue, maxValue + 1);
+            return _random.Next(minValue, maxValue);
         }
     }
 }
