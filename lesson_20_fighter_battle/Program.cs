@@ -4,7 +4,10 @@
     {
         static void Main()
         {
-            Console.WindowWidth = 100;
+            const string BeginFightMenu = "1";
+            const string ExitMenu = "2";
+
+            Console.WindowWidth = 90;
             Console.BufferHeight = 500;
 
             BattleField battleField = new BattleField();
@@ -15,17 +18,17 @@
                 Console.Clear();
                 Console.WriteLine(
                     $"Меню:\n" +
-                    $"1 - Начать подготовку битвы\n" +
-                    $"2 - Покинуть поле битвы.\n" +
+                    $"{BeginFightMenu} - Начать подготовку битвы\n" +
+                    $"{ExitMenu} - Покинуть поле битвы.\n" +
                     $"Введите команду для продолжения: ");
 
                 switch (Console.ReadLine())
                 {
-                    case "1":
+                    case BeginFightMenu:
                         battleField.BeginBattle();
                         break;
 
-                    case "2":
+                    case ExitMenu:
                         isRun = false;
                         break;
 
@@ -46,6 +49,12 @@
 
         public void BeginBattle()
         {
+            const string ChooseFighterCommand = "0";
+            const string ChooseWarriorCommand = "1";
+            const string ChooseAssasignCommand = "2";
+            const string ChooseHunterCommand = "3";
+            const string ChooseWizzardCommand = "4";
+
             _fighters = new List<Fighter>();
 
             while (_fighters.Count < 2)
@@ -54,32 +63,32 @@
 
                 Console.WriteLine(
                     $"Доступные классы героев:\n" +
-                    $"0 - Figter\n" +
-                    $"1 - Warrior\n" +
-                    $"2 - Assasign\n" +
-                    $"3 - Hunter\n" +
-                    $"4 - Wizzard\n" +
+                    $"{ChooseFighterCommand} - Figter\n" +
+                    $"{ChooseWarriorCommand} - Warrior\n" +
+                    $"{ChooseAssasignCommand} - Assasign\n" +
+                    $"{ChooseHunterCommand} - Hunter\n" +
+                    $"{ChooseWizzardCommand} - Wizzard\n" +
                     $"Введите номер для выбора {_fighters.Count + 1} класса героя:");
 
                 switch (Console.ReadLine())
                 {
-                    case "0":
+                    case ChooseFighterCommand:
                         ChooseFighter(new Fighter());
                         break;
 
-                    case "1":
+                    case ChooseWarriorCommand:
                         ChooseFighter(new Warrior());
                         break;
 
-                    case "2":
+                    case ChooseAssasignCommand:
                         ChooseFighter(new Assasign());
                         break;
 
-                    case "3":
+                    case ChooseHunterCommand:
                         ChooseFighter(new Hunter());
                         break;
 
-                    case "4":
+                    case ChooseWizzardCommand:
                         ChooseFighter(new Wizzard());
                         break;
 
@@ -95,7 +104,7 @@
             Console.WriteLine("Начать битву?\nДля продолжения нажмите любую клавишу...\n\n");
             Console.ReadKey();
 
-            StartFighting();
+            Fight();
             CheckVictory();
 
             Console.ReadKey();
@@ -109,7 +118,7 @@
             }
         }
 
-        private void StartFighting()
+        private void Fight()
         {
             while (_fighters[0].IsAlive == true && _fighters[1].IsAlive == true)
             {
@@ -138,15 +147,20 @@
         }
 
         private void ChooseFighter(Fighter fighter) => _fighters.Add(fighter);
+
         private void ChooseFighter(Warrior warrior) => _fighters.Add(warrior);
+
         private void ChooseFighter(Assasign assasign) => _fighters.Add(assasign);
+
         private void ChooseFighter(Hunter hunter) => _fighters.Add(hunter);
+
         private void ChooseFighter(Wizzard wizzard) => _fighters.Add(wizzard);
     }
 
-    class Fighter : IDamageable, IDamageProvider, IHealable
+    class Fighter
     {
-        protected int _health;
+        private int _health;
+
         public Fighter()
         {
             Health = Generator.NextInt(150, 301);
@@ -154,20 +168,29 @@
             Name = Generator.NextName();
         }
 
-        public int Health { get => _health; protected set => SetHealth(value); }
+        public int Health
+        {
+            get => _health;
+            protected set => SetHealth(value);
+        }
         public int Damage { get; protected set; }
         public bool IsAlive => Health > 0;
         public string Name { get; protected set; }
 
         public virtual void Attack(Fighter target)
         {
-            if (IsAlive == false) return;
+            if (IsAlive == false)
+            {
+                return;
+            }
             else
             {
                 Console.WriteLine($"{GetType().Name} ({Name}) произвёл удар в сторону {target.GetType().Name} ({target.Name})");
 
                 if (target.IsAlive == true)
+                {
                     target.TryTakeDamage(Damage);
+                }
             }
         }
 
@@ -230,7 +253,10 @@
     {
         public override void Attack(Fighter target)
         {
-            if (IsAlive == false || target.IsAlive == false) return;
+            if (IsAlive == false || target.IsAlive == false)
+            {
+                return;
+            }
 
             Console.WriteLine($"{GetType().Name} ({Name}) произвёл удар в сторону {target.GetType().Name} ({target.Name})");
 
@@ -251,14 +277,19 @@
 
         public override void Attack(Fighter target)
         {
-            if (IsAlive == false) return;
+            if (IsAlive == false)
+            {
+                return;
+            }
             else
             {
                 int currentDamage = CalculateCriteDamage();
                 Console.WriteLine($"{GetType().Name} ({Name}) произвёл удар в сторону {target.GetType().Name} ({target.Name})");
 
                 if (target.IsAlive == true)
+                {
                     target.TryTakeDamage(currentDamage);
+                }
             }
         }
 
@@ -311,28 +342,13 @@
         }
     }
 
-    interface IDamageable
-    {
-        bool TryTakeDamage(int damage);
-    }
-
-    interface IDamageProvider
-    {
-        void Attack(Fighter target);
-    }
-
-    interface IHealable
-    {
-        void Healing(int healingPoint);
-    }
-
     static class Generator
     {
         private static Random _random = new Random();
         private static string[] _names =
             {
                 "Варвар",
-                "Алконафт",
+                "Космонафт",
                 "Миледи",
                 "Вульфич",
                 "Страйк",
@@ -342,19 +358,19 @@
                 "Нинка",
                 "Царь",
                 "Забота",
-                "Жарить",
+                "Прожариватель",
                 "Овощ",
                 "Имба",
                 "Нагибатель",
                 "Топчик",
                 "Холивар",
-                "Членчик",
+                "Бывалый",
                 "Пирожок",
                 "Котейка",
                 "Оливер",
                 "Викрам",
                 "Архидея",
-                "Вагинометр",
+                "Метрономщик",
                 "Зимник",
                 "Волкодав",
                 "Богатырь",
@@ -362,7 +378,7 @@
                 "Вурдолакыч",
                 "Зяблик",
                 "Кудахта",
-                "Чувайка",
+                "Чувиха",
                 "Мордорка",
                 "Куряха",
                 "Смоляха",
@@ -374,15 +390,17 @@
                 "Днище",
                 "Нубичка",
                 "Жираф",
-                "Лизун",
-                "Сосальщик",
-                "Подгузник",
-                "Тряпка"
+                "Подлиза",
+                "Лимурчик",
+                "Попрыгун",
+                "Тряпкович"
             };
+
         public static string NextName()
         {
             return _names[_random.Next(0, _names.Length - 1)];
         }
+
         public static int NextInt(int minValue, int maxValue)
         {
             return _random.Next(minValue, maxValue);
