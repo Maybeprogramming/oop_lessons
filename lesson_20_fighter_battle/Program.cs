@@ -4,59 +4,81 @@
     {
         static void Main()
         {
+            BattleField battleField = new BattleField();
+            battleField.StartBattle();
 
-            
+
+            Console.ReadKey();
         }
     }
 
-    class BatteDield
+    class BattleField
     {
-        List<Fighter> fighters = new List<Fighter>();
+        List<Fighter> fighters;
 
         public void StartBattle()
         {
-            while (fighters.Count < 3)
+            fighters = new List<Fighter>();
+
+            while (fighters.Count < 5)
             {
+                Console.Clear();
+
+                Console.WriteLine($"Доступные бойцы:\n" +
+                    $"0 - Figter\n" +
+                    $"1 - Warrior\n" +
+                    $"2 - Assasign\n" +
+                    $"3 - Hunter\n" +
+                    $"4 - Wizzard\n" +
+                    $"Введите номер для выбора бойца: ");
+
                 switch (Console.ReadLine())
                 {
                     case "0":
-                        ChooseFighter(Fighter.Create());
+                        ChooseFighter(new Fighter());
                         break;
 
                     case "1":
-                        ChooseFighter(Warrior.Create());
+                        ChooseFighter(new Warrior());
                         break;
 
                     case "2":
-                        ChooseFighter(Assasign.Create());
+                        ChooseFighter(new Assasign());
                         break;
+
+                    case "3":
+                        ChooseFighter(new Hunter());
+                        break;
+
+                    case "4":
+                        ChooseFighter(new Wizzard());
+                        break;
+
                     default:
                         Console.WriteLine("Нет такой команды!");
                         break;
                 }
             }
 
-            foreach(var fighter in fighters)
+            foreach (var fighter in fighters)
             {
                 Console.WriteLine(fighter);
             }
 
             Console.ReadKey();
 
+            StartBattle();
         }
 
-        void ChooseFighter(Func<Fighter> Create) => fighters.Add(Create.Invoke());
-        void ChooseFighter(Func<Warrior> Create) => fighters.Add(Create.Invoke());
-        void ChooseFighter(Func<Assasign> Create) => fighters.Add(Create.Invoke());
+        void ChooseFighter(Fighter fighter) => fighters.Add(fighter);
+        void ChooseFighter(Warrior warrior) => fighters.Add(warrior);
+        void ChooseFighter(Assasign assasign) => fighters.Add(assasign);
+        void ChooseFighter(Hunter hunter) => fighters.Add(hunter);
+        void ChooseFighter(Wizzard wizzard) => fighters.Add(wizzard);
     }
 
     class Fighter : IDamageable, IDamageProvider, IHealable
     {
-        internal static Func<Fighter> Create()
-        {
-            return () => new Fighter();
-        }
-
         public void Attack(Fighter target)
         {
             throw new NotImplementedException();
@@ -83,7 +105,17 @@
 
     }
 
-    class Assasign: Fighter
+    class Assasign : Fighter
+    {
+
+    }
+
+    class Hunter : Fighter
+    {
+
+    }
+
+    class Wizzard : Fighter
     {
 
     }
