@@ -6,6 +6,7 @@
         {
             Console.WindowWidth = 100;
             Console.BufferHeight = 2000;
+
             BattleField battleField = new BattleField();
             bool isRun = true;
 
