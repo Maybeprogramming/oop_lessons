@@ -199,7 +199,8 @@ namespace lesson_20_fighter_battle
 
             if (target.TryTakeDamage(Damage))
             {
-                int healingPoint = Damage / 10;
+                int damageDivider = 10;
+                int healingPoint = Damage / damageDivider;
                 Healing(healingPoint);
             }
         }
@@ -244,6 +245,8 @@ namespace lesson_20_fighter_battle
         private int _mana;
         private int _manMana = 100;
         private int _maxMana = 200;
+        private int _castingManaCost = 20;
+        private int _regenerationManaCount = 10;
 
         public Wizzard()
         {
@@ -254,17 +257,22 @@ namespace lesson_20_fighter_battle
 
         public override void Attack(Fighter target)
         {
-            base.Attack(target);
+            if (_mana >= _castingManaCost)
+            {
+                _mana -= _castingManaCost;
+                base.Attack(target);
+            }
+            else
+            {
+                _mana += _regenerationManaCount;
+                Console.WriteLine($"{GetType().Name} ({ Name}) не хватает маны для удара {target.GetType().Name} ({target.Name})");
+            }
         }
 
         public override bool TryTakeDamage(int damage)
         {
+            _mana += _regenerationManaCount;
             return base.TryTakeDamage(damage);
-        }
-
-        public override void Healing(int healingPoint)
-        {
-            base.Healing(healingPoint);
         }
     }
 
