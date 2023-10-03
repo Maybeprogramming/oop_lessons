@@ -10,8 +10,7 @@ namespace lesson_20_fighter_battle
             Console.WindowWidth = 100;
 
             BattleField battleField = new BattleField();
-            battleField.StartBattle();
-
+            battleField.BeginBattle();
 
             Console.ReadKey();
         }
@@ -21,7 +20,7 @@ namespace lesson_20_fighter_battle
     {
         private List<Fighter> _fighters;
 
-        public void StartBattle()
+        public void BeginBattle()
         {
             _fighters = new List<Fighter>();
 
@@ -67,22 +66,38 @@ namespace lesson_20_fighter_battle
             }
 
             Console.WriteLine("Готовые к бою отважные герои:");
-
-            for (int i = 0; i < _fighters.Count; i++)
-            {
-                Console.WriteLine($"{i + 1}. {_fighters[i].GetType().Name} ({_fighters[i].Name}): DMG: {_fighters[i].Damage}, HP: {_fighters[i].Health}");
-            }
+            AnnounceFightresNames();
 
             Console.WriteLine("Начать битву?\nДля продолжения нажмите любую клавишу...\n\n");
             Console.ReadKey();
 
+            StartFighting();
+            CheckVictory();
+
+            Console.ReadKey();
+            BeginBattle();
+        }
+
+        private void AnnounceFightresNames()
+        {
+            for (int i = 0; i < _fighters.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}. {_fighters[i].GetType().Name} ({_fighters[i].Name}): DMG: {_fighters[i].Damage}, HP: {_fighters[i].Health}");
+            }
+        }
+
+        private void StartFighting()
+        {
             while (_fighters[0].IsAlive == true && _fighters[1].IsAlive == true)
             {
                 _fighters[0].Attack(_fighters[1]);
                 _fighters[1].Attack(_fighters[0]);
                 Console.WriteLine(new string('-', 80));
             }
+        }
 
+        private void CheckVictory()
+        {
             if (_fighters[0].IsAlive == false && _fighters[1].IsAlive == false)
             {
                 Console.WriteLine("\nНичья! Оба героя пали на поле боя!");
@@ -95,9 +110,6 @@ namespace lesson_20_fighter_battle
             {
                 Console.WriteLine($"\nПобедитель - {_fighters[1]} ({_fighters[1].Name})!");
             }
-
-            Console.ReadKey();
-            StartBattle();
         }
 
         private void ChooseFighter(Fighter fighter) => _fighters.Add(fighter);
@@ -112,8 +124,8 @@ namespace lesson_20_fighter_battle
         protected int _health;
         public Fighter()
         {
-            Health = Generator.NextInt(100, 201);
-            Damage = Generator.NextInt(20, 51);
+            Health = Generator.NextInt(150, 301);
+            Damage = Generator.NextInt(10, 21);
             Name = Generator.NextName();
         }
 
@@ -243,8 +255,8 @@ namespace lesson_20_fighter_battle
     class Wizzard : Fighter
     {
         private int _mana;
-        private int _manMana = 100;
-        private int _maxMana = 200;
+        private int _manMana = 50;
+        private int _maxMana = 100;
         private int _castingManaCost = 20;
         private int _regenerationManaCount = 10;
 
