@@ -5,7 +5,7 @@
         static void Main()
         {
             Console.WindowWidth = 100;
-            Console.BufferHeight = 2000;
+            Console.BufferHeight = 500;
 
             BattleField battleField = new BattleField();
             bool isRun = true;
@@ -59,7 +59,7 @@
                     $"2 - Assasign\n" +
                     $"3 - Hunter\n" +
                     $"4 - Wizzard\n" +
-                    $"Введите номер для выбора бойца:");
+                    $"Введите номер для выбора {_fighters.Count + 1} класса героя:");
 
                 switch (Console.ReadLine())
                 {
