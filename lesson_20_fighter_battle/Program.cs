@@ -285,7 +285,7 @@
 
         public Wizzard()
         {
-            _mana = Generator.NextInt(_manMana, _maxMana);
+            _mana = Generator.NextInt(_manMana, _maxMana + 1);
         }
 
         public int Mana { get => _mana; }
