@@ -1,6 +1,6 @@
 ﻿namespace lesson_20_fighter_battle
 {
-    internal class Program
+    class Program
     {
         static void Main()
         {
