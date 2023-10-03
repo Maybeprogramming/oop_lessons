@@ -5,6 +5,7 @@
         static void Main()
         {
             Console.WindowWidth = 100;
+            Console.BufferHeight = 2000;
             BattleField battleField = new BattleField();
             bool isRun = true;
 
@@ -14,7 +15,8 @@
                 Console.WriteLine(
                     $"Меню:\n" +
                     $"1 - Начать подготовку битвы\n" +
-                    $"2 - Покинуть поле битвы.");
+                    $"2 - Покинуть поле битвы.\n" +
+                    $"Введите команду для продолжения: ");
 
                 switch (Console.ReadLine())
                 {
@@ -96,7 +98,6 @@
             CheckVictory();
 
             Console.ReadKey();
-            BeginBattle();
         }
 
         private void AnnounceFightresNames()
@@ -113,7 +114,9 @@
             {
                 _fighters[0].Attack(_fighters[1]);
                 _fighters[1].Attack(_fighters[0]);
-                Console.WriteLine(new string('-', 80));
+
+                Console.WriteLine(new string('-', 70));
+                Task.Delay(1000).Wait();
             }
         }
 
@@ -261,8 +264,6 @@
         private int CalculateCriteDamage()
         {
             int critChance = Generator.NextInt(0, _maxPercent + 1);
-
-            Console.WriteLine($"{critChance} шанс");
 
             if (critChance < _critPercent)
             {
