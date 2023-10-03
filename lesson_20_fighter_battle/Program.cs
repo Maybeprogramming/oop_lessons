@@ -139,7 +139,6 @@ namespace lesson_20_fighter_battle
         {
             Health += healingPoint;
             Console.WriteLine($"{GetType().Name} ({Name}) подлечил здоровье на ({healingPoint}) ед. Здоровье : ({Health})");
-
         }
 
         public virtual bool TryTakeDamage(int damage)
