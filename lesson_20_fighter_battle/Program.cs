@@ -14,13 +14,13 @@
 
     class BattleField
     {
-        private List<Fighter> fighters;
+        private List<Fighter> _fighters;
 
         public void StartBattle()
         {
-            fighters = new List<Fighter>();
+            _fighters = new List<Fighter>();
 
-            while (fighters.Count < 2)
+            while (_fighters.Count < 2)
             {
                 Console.Clear();
 
@@ -61,20 +61,44 @@
                 }
             }
 
-            foreach (var fighter in fighters)
+            Console.WriteLine("Готовые к бою отважные герои:");
+
+            foreach (var fighter in _fighters)
             {
                 Console.WriteLine(fighter);
+            }
+
+            Console.WriteLine("Начать битву?\nДля продолжения нажмите любую клавишу...");
+            Console.ReadKey();
+
+            while (_fighters[0].IsAlive == true && _fighters[1].IsAlive == true)
+            {
+                _fighters[0].Attack(_fighters[1]);
+                _fighters[1].Attack(_fighters[0]);
+            }
+
+            if (_fighters[0].IsAlive == false && _fighters[1].IsAlive == false)
+            {
+                Console.WriteLine("Ничья! Оба героя пали на поле боя!");
+            }
+            else if (_fighters[0].IsAlive == true && _fighters[1].IsAlive == false)
+            {
+                Console.WriteLine($"Победитель - {_fighters[0]} ({_fighters[0].Name})!");
+            }
+            else if(_fighters[0].IsAlive == false && _fighters[1].IsAlive == true)
+            {
+                Console.WriteLine($"Победитель - {_fighters[1]} ({_fighters[1].Name})!");
             }
 
             Console.ReadKey();
             StartBattle();
         }
 
-        private void ChooseFighter(Fighter fighter) => fighters.Add(fighter);
-        private void ChooseFighter(Warrior warrior) => fighters.Add(warrior);
-        private void ChooseFighter(Assasign assasign) => fighters.Add(assasign);
-        private void ChooseFighter(Hunter hunter) => fighters.Add(hunter);
-        private void ChooseFighter(Wizzard wizzard) => fighters.Add(wizzard);
+        private void ChooseFighter(Fighter fighter) => _fighters.Add(fighter);
+        private void ChooseFighter(Warrior warrior) => _fighters.Add(warrior);
+        private void ChooseFighter(Assasign assasign) => _fighters.Add(assasign);
+        private void ChooseFighter(Hunter hunter) => _fighters.Add(hunter);
+        private void ChooseFighter(Wizzard wizzard) => _fighters.Add(wizzard);
     }
 
     class Fighter : IDamageable, IDamageProvider, IHealable
