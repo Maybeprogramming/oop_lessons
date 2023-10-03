@@ -1,7 +1,4 @@
-﻿using System.Xml.Linq;
-using static System.Net.Mime.MediaTypeNames;
-
-namespace lesson_20_fighter_battle
+﻿namespace lesson_20_fighter_battle
 {
     internal class Program
     {
