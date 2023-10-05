@@ -344,8 +344,8 @@
 
     static class Generator
     {
-        private static Random _random = new Random();
-        private static string[] _names =
+        private static Random s_random = new Random();
+        private static string[] s_names =
             {
                 "Варвар",
                 "Космонафт",
@@ -398,12 +398,12 @@
 
         public static string NextName()
         {
-            return _names[_random.Next(0, _names.Length - 1)];
+            return s_names[s_random.Next(0, s_names.Length - 1)];
         }
 
         public static int NextInt(int minValue, int maxValue)
         {
-            return _random.Next(minValue, maxValue);
+            return s_random.Next(minValue, maxValue);
         }
     }
 }
