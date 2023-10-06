@@ -406,4 +406,19 @@
             return s_random.Next(minValue, maxValue);
         }
     }
+
+    static class UserInput
+    {
+        public static int ReadInt(int minValue = int.MinValue, int maxValue = int.MaxValue)
+        {
+            int result;
+
+            while (int.TryParse(Console.ReadLine(), out result) == false || result < minValue || result >= maxValue)
+            {
+                Console.Error.WriteLine("Ошибка!. Попробуйте снова!");
+            }
+
+            return result;
+        }
+    }
 }
