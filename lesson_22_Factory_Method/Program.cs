@@ -19,6 +19,7 @@
         }
     }
 
+    #region Стандартный шаблон
     abstract class Product { }
     class ConcreteProductA : Product { }
     class ConcreteProductB : Product { }
@@ -43,7 +44,10 @@
             return new ConcreteProductB();
         } 
     }
+    #endregion
 
+
+    #region Пример использования 1
     abstract class Army 
     {
         protected Army(string name)
@@ -105,6 +109,7 @@
             return new Tank(text);
         }
     }
+    #endregion
 }
 
 #region Теория Патерна - Фабричный метод
