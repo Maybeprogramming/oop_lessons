@@ -4,6 +4,13 @@
     {
         static void Main()
         {
+            ArmyCreator armyCreator = new InfantryCreator($"Казарма");
+            Army unit1 = armyCreator.Create("Стрелок");
+
+            armyCreator = new TankCreator("Танковый завод");
+            Army unit2 = armyCreator.Create("Тигр");
+
+            Console.ReadKey();
         }
     }
 
@@ -30,6 +37,68 @@
         { 
             return new ConcreteProductB();
         } 
+    }
+
+    abstract class Army 
+    {
+        protected Army(string name)
+        {
+            Name = name;
+        }
+
+        public string Name { get; protected set; }
+    }
+
+    class Infanty : Army
+    {
+        public Infanty(string name) : base(name)
+        {
+            Console.WriteLine($"Боец: \"{Name}\" успешно прошёл обучение и готов к бою.");
+        }
+    }
+
+    class Tank : Army
+    {
+        public Tank(string name) : base(name)
+        {
+            Console.WriteLine($"Танк: \"{Name}\" успешно был изготовлен и готов к бою.");
+        }
+    }
+
+    abstract class ArmyCreator
+    {
+        public string Name { get; protected set; }
+
+        public ArmyCreator(string n)
+        {
+            Name = n;
+        }
+
+        abstract public Army Create(string text);
+    }
+
+    class InfantryCreator : ArmyCreator
+    {
+        public InfantryCreator(string n) : base(n)
+        {
+        }
+
+        public override Army Create(string text)
+        {
+            return new Infanty(text);
+        }
+    }
+
+    class TankCreator : ArmyCreator
+    {
+        public TankCreator(string n) : base(n)
+        {
+        }
+
+        public override Army Create(string text)
+        {
+            return new Tank(text);
+        }
     }
 }
 
