@@ -4,11 +4,16 @@
     {
         static void Main()
         {
+            List<Army> armies = new List<Army>();
+
             ArmyCreator armyCreator = new InfantryCreator($"Казарма");
             Army unit1 = armyCreator.Create("Стрелок");
 
             armyCreator = new TankCreator("Танковый завод");
             Army unit2 = armyCreator.Create("Тигр");
+
+            armies.Add(unit1);
+            armies.Add(unit2);
 
             Console.ReadKey();
         }
