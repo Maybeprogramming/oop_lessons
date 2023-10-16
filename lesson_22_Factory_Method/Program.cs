@@ -7,13 +7,19 @@
             List<Army> armies = new List<Army>();
 
             ArmyCreator armyCreator = new InfantryCreator($"Казарма");
-            Army unit1 = armyCreator.Create("Стрелок");
+            armies.Add(armyCreator.Create("Штурмовик"));
+            armies.Add(armyCreator.Create("Пулеметчик"));
+            armies.Add(armyCreator.Create("Снайпер"));
 
             armyCreator = new TankCreator("Танковый завод");
-            Army unit2 = armyCreator.Create("Тигр");
+            armies.Add(armyCreator.Create("Тигр"));
+            armies.Add(armyCreator.Create("ИС-3"));
+            armies.Add(armyCreator.Create("Т-92М"));
 
-            armies.Add(unit1);
-            armies.Add(unit2);
+            foreach (var unit in armies)
+            {
+                Console.WriteLine($"{unit}");
+            }
 
             Console.ReadKey();
         }
@@ -24,7 +30,7 @@
     class ConcreteProductA : Product { }
     class ConcreteProductB : Product { }
 
-    abstract class  Creator
+    abstract class Creator
     {
         public abstract Product FactoryMethod();
     }
@@ -37,18 +43,18 @@
         }
     }
 
-    class ConcreteCreatorB : Creator 
-    { 
-        public override Product FactoryMethod() 
-        { 
+    class ConcreteCreatorB : Creator
+    {
+        public override Product FactoryMethod()
+        {
             return new ConcreteProductB();
-        } 
+        }
     }
     #endregion
 
 
     #region Пример использования 1
-    abstract class Army 
+    abstract class Army
     {
         protected Army(string name)
         {
@@ -56,13 +62,23 @@
         }
 
         public string Name { get; protected set; }
+
+        public override string ToString()
+        {
+            return $"Боевая единица: {Name} готова к бою.";
+        }
     }
 
     class Infanty : Army
     {
         public Infanty(string name) : base(name)
         {
-            Console.WriteLine($"Боец: \"{Name}\" успешно прошёл обучение и готов к бою.");
+            //Console.WriteLine($"Боец: \"{Name}\" успешно прошёл обучение и готов к бою.");
+        }
+
+        public override string ToString()
+        {
+            return $"Боец: \"{Name}\" успешно прошёл обучение и готов к бою.";
         }
     }
 
@@ -70,7 +86,12 @@
     {
         public Tank(string name) : base(name)
         {
-            Console.WriteLine($"Танк: \"{Name}\" успешно был изготовлен и готов к бою.");
+           // Console.WriteLine($"Танк: \"{Name}\" успешно был изготовлен и готов к бою.");
+        }
+
+        public override string ToString()
+        {
+            return $"Танк: \"{Name}\" успешно был изготовлен и готов к бою.";
         }
     }
 
