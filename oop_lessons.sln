@@ -45,7 +45,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "lesson_20_fighter_battle", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "lesson_21_fighter_battle_example", "lesson_21_fighter_battle_example\lesson_21_fighter_battle_example.csproj", "{A18F944E-2F49-44C2-9614-DBBC6227AF54}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lesson_22_Factory_Method", "lesson_22_Factory_Method\lesson_22_Factory_Method.csproj", "{6E6D2925-BF8F-4681-8623-152736EAA0E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "lesson_22_Factory_Method", "lesson_22_Factory_Method\lesson_22_Factory_Method.csproj", "{6E6D2925-BF8F-4681-8623-152736EAA0E5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lesson_23_pattern_Strategy", "lesson_23_pattern_Strategy\lesson_23_pattern_Strategy.csproj", "{D3DFA559-890F-4EE7-AA6C-B39B7ADEE7FD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -141,6 +143,10 @@ Global
 		{6E6D2925-BF8F-4681-8623-152736EAA0E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E6D2925-BF8F-4681-8623-152736EAA0E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6E6D2925-BF8F-4681-8623-152736EAA0E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3DFA559-890F-4EE7-AA6C-B39B7ADEE7FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3DFA559-890F-4EE7-AA6C-B39B7ADEE7FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3DFA559-890F-4EE7-AA6C-B39B7ADEE7FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3DFA559-890F-4EE7-AA6C-B39B7ADEE7FD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
